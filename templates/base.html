@@ -9,16 +9,16 @@
   <title>{% block title %}{% endblock title %}</title>
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-  <link rel="icon" href="{% static '' %}">
+  <link rel="icon" href="{% static 'image/money_log.png' %}">
   {% block head %}{% endblock head %}
   {% block style %}{% endblock style %}
 </head>
 <body>
   <nav>
     <div class="nav--logo">
-      <a href="{% url 'main' %}">Think-A-Bill</a>
+      <a href="#">Think-A-Bill</a>
     </div>
-    {% block search-bar %}
+    {% comment %} {% block search-bar %}
     <div class="nav--search">
       <form action="{% url 'posts:search' %}" class="search">
         {% csrf_token %}
@@ -65,7 +65,7 @@
         </ul>
       </div>
       {% endif %}
-    </div>
+    </div> {% endcomment %}
   </nav>
   <section>
     {% block content %}
