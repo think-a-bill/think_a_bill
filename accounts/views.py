@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, get_user_model
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomAuthenticationForm, CustomPasswordChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 # Create your views here.
 # def login(request):
