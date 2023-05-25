@@ -6,12 +6,12 @@ from .models import Post, Emote , Comment
 
 # Create your views here.
 def index_redirect(request):
-    return redirect('reviews:index')
+    return redirect('index')
 
 def index(request):
     context = {
     }
-    return render(request, 'posts/index.html', context)
+    return render(request, 'index.html', context)
 
 def create(request):
     if request.method == 'POST':

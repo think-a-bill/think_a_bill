@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm, Authenti
 from django.contrib.auth import get_user_model
 import datetime
 
+# 회원가입
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
         label=False,
@@ -67,7 +68,10 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = ('username', 'email', 'last_name', 'password1', 'password2', 'birthday')
 
+# 유저 계정 수정
 class CustomUserChangeForm(UserCreationForm):
   class Meta(UserChangeForm.Meta):
     model = get_user_model()
     fields = ('email','first_name','last_name')
+
+# 비밀번호 변경
