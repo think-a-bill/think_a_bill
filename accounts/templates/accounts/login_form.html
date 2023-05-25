@@ -1,5 +1,19 @@
-<form action="" method='POST'>
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value='로그인'>
-</form>
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock title %}
+
+{% block style %}
+<style>
+  form li {
+    display:none;
+  }
+</style>
+{% endblock style %}
+
+{% block content %}
+  <form action="" method='POST'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value='로그인'>
+  </form>
+{% endblock content %}
