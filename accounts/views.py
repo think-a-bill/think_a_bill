@@ -1,5 +1,8 @@
+from django.contrib import messages
+
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, get_user_model, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -74,7 +77,7 @@ class profiledetailview(DetailView):
 
 def profile_detail(request,username):
   # 어차피 해당 유저의 프로필을 보여줌.
-  profile_detail = User.objects.get(username=request.user.username)
+  profile_detail = User.objects.get(username=username)
   context = {
     'profile_detail' : profile_detail
   }
@@ -93,3 +96,15 @@ def follow(request,username):
       person.followers.add(request.user)
       # 현재 있는 페이지로 리다이렉트
   return redirect('accounts:detail', person.username)
+
+@login_required
+def image_upload(request,username):
+  if request.method == 'POST':
+    user_model = User.objects.get(username=username)
+    image_data = request.FILES['image']
+    user_model.image = image_data
+    user_model.save()
+    messages.info(request, '이미지가 정상적으로 업로드 되었습니다.')
+    return redirect('accounts:detail' ,username=username)
+  else:
+    return HttpResponse('GET request')
