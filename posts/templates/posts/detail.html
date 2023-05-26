@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% comment %} {% load filters %} {% endcomment %}
+{% block title %}
+{{post.title}}
+{% endblock title %}
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/detail.css' %}">
+{% endblock head %}
+
+{% block content %}
+  <div class="detail--box">
+    {{post.title}}<br>
+    {{post.category}}<br>
+    <img src="{{ post.image.url }}" alt="Post Image"><br>
+    {{post.content}}<br>
+    <div>
+        {% for tag in tags %}
+        <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
+    {% endfor %}
+    </div>
+    {% for comment in comments %}
+    {{comment.user}}
+    {{comment.content}}
+    {% endfor %}
+  </div>   
+{% endblock  %}
