@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+  게시글 작성
+{% endblock title %}
+
+{% block content %}
+  <div class="posts--box">
+    <div class="posts--create">
+      <h1>게시글을 작성해주세요!</h1>
+      <form action="{% url 'posts:create' %}" method='POST' enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{ post_form.as_p }}
+        <input class="posts--btn" type="submit" value="등록">
+        <input type="submit" value="뒤로가기" class="posts--btn" onclick=window.history.back()>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

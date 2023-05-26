@@ -51,10 +51,13 @@ nav {
   position: sticky;
   top: 0;
   height: 90px;
-  background-color: rgb(137, 186, 150);
-  display: grid;
+  background-color: #F0FDFA;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   z-index: 999;
+  box-shadow: 1px 10px 29px 1px rgba(171,171,171,0.29);
+  padding: 0 1rem;
 }
 
 
@@ -91,9 +94,13 @@ ul li {
   margin-bottom: 10px;
 }
 
+.show {
+  display: block !important;
+}
+
 /* Nav */
 
-.nav--logo {
+/* .nav--logo {
   padding-left: 20px;
 }
 
@@ -109,7 +116,7 @@ ul li {
     grid-column: 1 / 5;
     margin-left: 50px;
   }
-}
+} */
 
 .nav--logo a{
   text-decoration: none;
@@ -118,6 +125,32 @@ ul li {
   font-family: 'PyeongChangPeace-Bold';
 }
 
+.nav--right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav--search--mobile {
+  display: none;
+}
+
+.nav--search--mobile .search-btn {
+  position: static;
+}
+
+@media screen and (max-width: 767px) {
+  .nav--search {
+    display: none;
+  }
+
+  .nav--search--mobile {
+    display: block;
+  }
+}
+
+
+/* 
 .nav--search {
   margin-left: auto;
   width: 250px;
@@ -133,7 +166,7 @@ ul li {
   .nav--search {
     grid-column: 8 / 10;
   }
-}
+} */
 
 .search {
   position: relative;
@@ -176,7 +209,7 @@ ul li {
 }
 
 .nav--accounts {
-  margin-left: 30px;
+  /* margin-left: 30px; */
   height: 100%;
   display: flex;
   align-items: center;

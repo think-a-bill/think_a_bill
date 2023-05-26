@@ -21,7 +21,7 @@ urlpatterns = [
 
     
     # 기타 url
-    # path('search/', views.search, name="search"),
+    path('search/', views.search, name="search"),
     path('tags/<int:tag_pk>/', views.tagged, name='tagged'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
