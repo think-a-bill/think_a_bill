@@ -30,8 +30,8 @@
         </div>
       </form>
     </div>
-    {% endblock search-bar %}
-    <div class="nav--accounts">
+    {% endblock search-bar %} {% endcomment %}
+    {% comment %} <div class="nav--accounts">
       {% if request.user.is_authenticated %}
         {% if user.image %}
         <div class="dropdown">

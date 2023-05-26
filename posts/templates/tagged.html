@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  {{ tag }} List
+{% endblock title %}
+
+{% block content  %}
+  <div class="tag--title">
+    <h2>#{{ tag }}</h2>
+  </div>
+  <h4 class="mb-4"><b>#{{ tag.name }} ({{ posts|length }})</b></h4>
+{% endblock %}

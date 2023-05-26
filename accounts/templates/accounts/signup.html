@@ -1,8 +1,19 @@
-<div>
-  <form action="{% url 'accounts:signup' %}" method='POST'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="가입" class="btn btn-light">
-    <a href="{% url 'accounts:login' %}" ></a>
-  </form>
-</div>
+{% extends 'base.html' %}
+{% block title %}Join{% endblock %}
+{% block style %}
+<style>
+  form li {
+    list-style: none;
+  }
+</style>
+{% endblock style %}
+{% block content %}
+  <div>
+    <form action="{% url 'accounts:signup' %}" method='POST'>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="가입" class="accounts--btn">
+      <a href="{% url 'accounts:login' %}" class="accounts--btn">Login</a>
+    </form>
+  </div>
+  {% endblock content %}
