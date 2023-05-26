@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Search
+{% endblock title %}
+
+{% block content %}
+<h4 class="mb-4"><b>"{{ query }}"으로 검색한 결과입니다 ({{ search_list|length }})</b></h4>
+{% if search_list %}
+  {% for search in search_list %}
+    <h2><strong>{{ search.title }}</strong></h2>
+  {% endfor %}
+{% else %}
+<h2>검색 결과가 존재하지 않습니다.</h2> 
+{% endif %}
+
+{% endblock %}

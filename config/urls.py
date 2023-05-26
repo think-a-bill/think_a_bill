@@ -21,7 +21,7 @@ from posts import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', views.index_redirect),
+    path('', views.index_redirect),
     path('accounts/', include('accounts.urls')),
     path('posts/', include('posts.urls')),
     path('products/', include('products.urls')),

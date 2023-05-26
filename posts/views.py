@@ -3,19 +3,40 @@ from .forms import PostForm , CommentForm
 from django.http import JsonResponse
 from .models import Post, Emote , Comment
 from taggit.models import Tag
+from django.db.models import Q
 
 
 # Create your views here.
-# def index_redirect(request):
-#     return redirect(request, 'reviews:index')
+def index_redirect(request):
+    return render(request, 'reviews:index')
 
 def index(request):
-    return render(request, 'posts/index.html')
+    context = {
+    }
+    return render(request, 'posts/index.html', context)
+
+# def create(request):
+#     if request.method == 'POST':
+#         form = PostForm(request.POST, request.FILES)
+#         tags = request.POST.get('tags').split(',')
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.user = request.user
+#             post.save()
+#             for tag in tags:
+#                 post.tags.add(tag.strip())
+#             return redirect('posts:detail', post.pk)
+#     else:
+#         form = PostForm()
+#     context = {
+#         'post':post,
+#     }
+#     return render(request, 'posts/create.html', context)
 
 def create(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
-        tags = request.POST.get('tags').split(',')
+        tags = request.POST.get('tags', '').split(',')
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
@@ -26,9 +47,9 @@ def create(request):
     else:
         form = PostForm()
     context = {
-        'post':post,
+        'post_form': form,
     }
-    return render(request, 'posts/index.html', context)
+    return render(request, 'posts/create.html', context)
 
 def update(request, post_pk):
     post = Post.objects.get(pk=post_pk)
@@ -168,13 +189,16 @@ def tagged(request, tag_pk):
     return render(request, 'posts/tagged.html', context)
 
 def search(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-        posts = Post.objects.filter(name__contains=searched)
-        context = {
-            'searched':searched,
-            'posts':posts,
-        }
-        return render(request, 'posts/searched.html', context)
-    else:
-        return render(request, 'posts/searched.html')
+    query = None
+    search_list = None
+
+    if 'q' in request.GET:
+        query = request.GET.get('q')
+        search_list = Post.objects.filter(
+            Q(title__icontains=query) | Q(tags__name__icontains=query) # 제목 / 태그 검색
+        ).distinct() # 검색 결과 중복 제거
+    context = {
+        'query': query,
+        'search_list': search_list,
+    }
+    return render(request, 'posts/search.html', context)
