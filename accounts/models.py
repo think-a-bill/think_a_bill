@@ -6,4 +6,3 @@ from django.db import models
 class User(AbstractUser):
     nickname = models.CharField(max_length=20)
     follow = models.ManyToManyField('self',symmetrical=False,related_name='followers')
-
