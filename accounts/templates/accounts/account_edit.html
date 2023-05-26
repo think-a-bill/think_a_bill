@@ -3,6 +3,8 @@
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="수정" class="btn btn-light">
-    <a href="{% url 'accounts:login' %}" ></a>
   </form>
+  <a href="{% url 'accounts:login' %}" >로그인</a>
+    <a href="{% url 'accounts:delete' %}">계정 삭제</a>
+
 </div>

@@ -1,10 +1,10 @@
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login as auth_login, get_user_model
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import login as auth_login, get_user_model, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.views.generic import DetailView
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -29,7 +29,7 @@ User = get_user_model()
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('main')
+        return redirect('posts:index')
     
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -56,17 +56,40 @@ def account_edit(request):
   context = {
     'form' : form
   }
-  return render(request, 'account_edit.html',context)
+  return render(request, 'accounts/account_edit.html',context)
 
-# @login_required
-# def passwordchange(request):
-#   if request.method == 'POST':
-#     form = PasswordChangeForm(request.user,request.POST)
-#     if form.is_valid():
-#       form.save()
-#       update_session
-#       return redirect('posts:index')
-#   else:
-#     form = PasswordChangeForm(request.user)
 class CustomPasswordChangeView(PasswordChangeView):
   success_url = reverse_lazy('posts:index')
+
+def delete(request):
+  request.user.delete()
+  auth_logout(request)
+  return redirect('posts:index')
+
+
+class profiledetailview(DetailView):
+  model = User
+  template_name = 'accounts/profile_detail.html'
+  context_object_name = 'details'
+
+def profile_detail(request,username):
+  # 어차피 해당 유저의 프로필을 보여줌.
+  profile_detail = User.objects.get(username=request.user.username)
+  context = {
+    'profile_detail' : profile_detail
+  }
+  return render(request,'accounts/profile_detail.html',context)
+
+@login_required
+def follow(request,username):
+  person = User.objects.get(username=username)
+  # 팔로우를 다른 유저가 하면 ~
+  if person != request.user:
+    # person(본인 아닌 다른유저)이 이미 팔로우가 되어 있으면
+    if person.followers.filter(pk=request.user.pk).exists():
+      # 역참조 코드 : followers
+      person.followers.remove(request.user)
+    else:
+      person.followers.add(request.user)
+      # 현재 있는 페이지로 리다이렉트
+  return redirect('accounts:detail', person.username)
