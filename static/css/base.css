@@ -98,6 +98,27 @@ ul li {
   display: block !important;
 }
 
+offcanvas-container {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.offcanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.offcanvas.show {
+  transform: translateX(0);
+}
+
 /* Nav */
 
 /* .nav--logo {
