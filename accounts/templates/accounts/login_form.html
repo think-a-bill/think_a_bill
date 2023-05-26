@@ -11,9 +11,17 @@
 {% endblock style %}
 
 {% block content %}
-  <form action="" method='POST'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value='로그인'>
-  </form>
+  <div class="accounts--box">
+    <div class="accounts--join">
+      <h1>로그인 페이지</h1>
+      <form action="" method='POST'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value='로그인' class="accounts--btn">
+        <input type="submit" value="Back" class="accounts--btn" onclick=window.history.back()>
+      </form>
+    </div>
+  </div>
+  <hr>
+  
 {% endblock content %}

@@ -6,3 +6,4 @@ django-templatetag-sugar==1.0
 pytz==2023.3
 sqlparse==0.4.4
 typing_extensions==4.6.1
+django-taggit-templatetags2==1.6.1

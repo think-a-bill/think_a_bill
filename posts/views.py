@@ -2,23 +2,29 @@ from django.shortcuts import render, redirect
 from .forms import PostForm , CommentForm
 from django.http import JsonResponse
 from .models import Post, Emote , Comment
+from taggit.models import Tag
 
 
 # Create your views here.
-def index_redirect(request):
-    return redirect('index')
+# def index_redirect(request):
+#     return redirect(request, 'reviews:index')
 
 def index(request):
-    context = {
-    }
-    return render(request, 'index.html', context)
+    return render(request, 'posts/index.html')
 
 def create(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
+        tags = request.POST.get('tags').split(',')
         if form.is_valid():
             post = form.save(commit=False)
-            
+            post.user = request.user
+            post.save()
+            for tag in tags:
+                post.tags.add(tag.strip())
+            return redirect('posts:detail', post.pk)
+    else:
+        form = PostForm()
     context = {
         'post':post,
     }
@@ -31,16 +37,21 @@ def update(request, post_pk):
             form = PostForm(request.POST, request.FILES, instance=post)
             if form.is_valid():
                 form.save()
+                post.tags.clear()
+                tags = request.POST.get('tags').split(',')
+                for tag in tags:
+                    post.tags.add(tag.strip())
                 return redirect('posts:detail', post.pk)
         else:
-            form = PostForm()
+            form = PostForm(nstance=post)
     else:
         return redirect('posts:detail',post.pk)
     context = {
         'form':form,
         'post':post,
     }
-    return render(request, 'posts/upate.html')
+    return render(request, 'posts/upate.html', context)
+
 def delete(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     if request.user == post.user :
@@ -49,12 +60,14 @@ def delete(request, post_pk):
 
 def detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
+    tags = post.tags.all()
     comments = post.comment_set.all()
     comment_form = CommentForm()
     context = {
         'post': post,
         'comment_form': comment_form,
-        'comments': comments
+        'comments': comments,
+        'tags': tags,
     }
     return render(request, 'posts/detail.html', context)
 
@@ -106,6 +119,7 @@ def comments_likes(request, post_pk, comment_pk):
         'comment_is_liked': comment_is_liked,
         'post_comment_likes_count': comment.like_users.count(), #좋아요 수 표시
     }
+
 def comments_update(request, post_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     post = Post.objects.get(pk=post_pk)
@@ -123,7 +137,7 @@ def comments_update(request, post_pk, comment_pk):
         'form':form,
         'comment':comment,
     }
-    return render(request, 'posts:detail', post.pk)
+    return render(request, 'posts:detail', context)
 
 EMOTIONS = [
     {'label': '유용해요', 'value': 1},
@@ -144,3 +158,23 @@ def emotes(request, post_pk, emotion):
 
     return redirect('posts:detail', post_pk)
 
+def tagged(request, tag_pk):
+    tag = Tag.objects.get(pk=tag_pk)
+    posts = Post.objects.filter(tags=tag)
+    context = {
+        'tag': tag,
+        'posts':posts,
+    }
+    return render(request, 'posts/tagged.html', context)
+
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        posts = Post.objects.filter(name__contains=searched)
+        context = {
+            'searched':searched,
+            'posts':posts,
+        }
+        return render(request, 'posts/searched.html', context)
+    else:
+        return render(request, 'posts/searched.html')

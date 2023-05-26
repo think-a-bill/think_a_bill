@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'posts',
     'products',
     'chats',
+    'taggit',
+    'taggit_templatetags2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

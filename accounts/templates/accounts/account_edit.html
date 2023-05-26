@@ -1,8 +1,17 @@
-<div>
-  <form action="{% url 'accounts:signup' %}" method='POST'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="수정" class="btn btn-light">
-    <a href="{% url 'accounts:login' %}" ></a>
-  </form>
-</div>
+{% extends 'base.html' %}
+
+{% block title %}Update{% endblock title %}
+{% block content %}
+  <div class="accounts--box">
+    <div class="accounts--join">
+      <h1>회원정보 수정</h1>
+      <form action="{% url 'accounts:account_edit' %}" method='POST'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="수정" class="accounts--btn">
+        <a href="{% url 'accounts:password_change' %}" class="accounts--btn">Password</a>
+        <input type="submit" value="Back" class="accounts--btn" onclick=window.history.back()>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
