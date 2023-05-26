@@ -8,4 +8,3 @@ class User(AbstractUser):
     profile_photo = models.ImageField(blank=True, upload_to='profile',unique=True)
     birthday = models.DateField(blank=False,)
     follow = models.ManyToManyField('self',symmetrical=False,related_name='followers')
-
