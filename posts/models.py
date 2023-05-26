@@ -15,7 +15,7 @@ class Post(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='images/post/%Y/%m/%d/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # tags = TaggableManager(blank=True, related_name='post_tags')  추후 논의 필요
+    tags = TaggableManager(blank=True, related_name='post_tags')  
     
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
