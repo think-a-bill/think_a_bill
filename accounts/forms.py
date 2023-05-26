@@ -66,12 +66,12 @@ class CustomUserCreationForm(UserCreationForm):
     
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('username', 'nickname', 'email', 'last_name', 'password1', 'password2', 'birthday')
+        fields = ('username', 'nickname', 'email','last_name', 'password1', 'password2', 'birthday')
 
 # 유저 계정 수정
 class CustomUserChangeForm(UserCreationForm):
   class Meta(UserChangeForm.Meta):
     model = get_user_model()
-    fields = ('email','first_name','last_name')
+    fields = ('username', 'nickname', 'email','last_name', 'password1', 'password2', 'birthday')
 
 # 비밀번호 변경
