@@ -12,6 +12,7 @@ urlpatterns = [
     path('password-change/', CustomPasswordChangeView.as_view(template_name='accounts/password_change_form.html'), name='password_change'),
     path('delete/',views.delete,name='delete'),
     path('<username>/',views.profile_detail,name='detail'),
-    path('<username>/follow/',views.follow,name='follow'),
+    # path('<username>/follow/',views.follow,name='follow'),
+    path('toggle-follow/', views.toggle_follow, name='toggle_follow'),
     path('<username>/image/',views.image_upload,name='image_upload')
 ]

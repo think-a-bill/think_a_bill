@@ -8,7 +8,7 @@ from django.contrib.auth import login as auth_login, get_user_model, logout as a
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
-
+from django.http import JsonResponse
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 # Create your views here.
@@ -89,13 +89,13 @@ def follow(request,username):
   # 팔로우를 다른 유저가 하면 ~
   if person != request.user:
     # person(본인 아닌 다른유저)이 이미 팔로우가 되어 있으면
-    if person.followers.filter(pk=request.user.pk).exists():
+    if person.followers.filter(username=request.user.username).exists():
       # 역참조 코드 : followers
       person.followers.remove(request.user)
     else:
       person.followers.add(request.user)
       # 현재 있는 페이지로 리다이렉트
-  return redirect('accounts:detail', person.username)
+  return redirect('accounts:detail', username=person.username)
 
 @login_required
 def image_upload(request,username):
@@ -108,3 +108,22 @@ def image_upload(request,username):
     return redirect('accounts:detail' ,username=username)
   else:
     return HttpResponse('GET request')
+
+
+@login_required
+def toggle_follow(request):
+  if request.method == 'POST':
+    user_pk = request.POST.get('user_pk')
+    person = User.objects.get(pk=user_pk)
+
+    if person != request.user:
+      if person.followers.filter(pk=request.user.pk).exists():
+        person.followers.remove(request.user)
+        is_following = False
+      else:
+        person.followers.add(request.user)
+        is_following = True
+
+      return JsonResponse({'is_following': is_following})
+
+  return JsonResponse({'error': 'Invalid request'})

@@ -17,7 +17,7 @@
 </form>
 {% if request.user != person %}
     <div>
-        <form action="{% url 'accounts:follow' username=user.username %}" method="POST">
+        <form action="{% url 'accounts:toggle_follow' %}" method="POST">
             {% csrf_token %}
         {% if request.user in person.followers.all %}
             <input type="submit" value="Unfollow">
@@ -28,3 +28,29 @@
     </div>
 {% endif %}
 
+<script>
+$(document).ready(function() {
+$('.follow-button').on('click', function(e) {
+    e.preventDefault();
+    var user_pk = $(this).data('user-pk');
+    var button = $(this);
+
+    $.ajax({
+        url: '/toggle-follow/',
+        type: 'POST',
+        data: {'user_pk': user_pk},
+        dataType: 'json',
+        success: function(response) {
+            if (response.is_following) {
+                button.text('Unfollow');
+            } else {
+                button.text('Follow');
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log('Error:', errorThrown);
+        }
+    });
+});
+});
+</script>
