@@ -8,7 +8,7 @@ from django.db.models import Q
 
 # Create your views here.
 def index_redirect(request):
-    return render(request, 'posts:index')
+    return render(request, 'posts/index.html')
 
 def index(request):
     context = {

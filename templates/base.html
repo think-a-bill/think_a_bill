@@ -68,18 +68,11 @@
           <ul class="dropdown-menu">
             {% comment %} <li><a class="dropdown-item" href="{% url 'accounts:profile' user %}">{{ user }}</a></li> {% endcomment %}
             <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:signup' %}">Join</a></li>
           </ul>
         </div>
         {% endif %}
-      {% else %}
-      <div class="dropdown">
-        <button class="profile--image rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          {% comment %} <img src="{% static 'image/no-profile-img.png' %}" alt="" class="object-fit-fill profile"> {% endcomment %}
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a></li>
-          <li><a class="dropdown-item" href="{% url 'accounts:signup' %}">Join</a></li>
-        </ul>
       </div>
     </div>
   </nav>
