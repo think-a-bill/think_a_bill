@@ -4,16 +4,15 @@ from django.http import JsonResponse
 from .models import Post, Emote , Comment
 from taggit.models import Tag
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 
-
+User = get_user_model()
 # Create your views here.
 def index_redirect(request):
     return render(request, 'posts/index.html')
 
 def index(request):
-    context = {
-    }
-    return render(request, 'posts/index.html', context)
+    return render(request, 'posts/index.html')
 
 # def create(request):
 #     if request.method == 'POST':

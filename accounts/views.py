@@ -79,7 +79,7 @@ def profile_detail(request,username):
   # 어차피 해당 유저의 프로필을 보여줌.
   profile_detail = User.objects.get(username=username)
   context = {
-    'profile_detail' : profile_detail
+    'profile_detail' : profile_detail,
   }
   return render(request,'accounts/profile_detail.html',context)
 
