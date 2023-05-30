@@ -1,19 +1,38 @@
-{% if messages %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+{% endblock head %}
+{% block style %}
+<style>
+  section {
+    position: relative;
+  }
+</style>
+{% endblock style %}
+{% block content %}
+
+  {% if messages %}
   <ul class="messages">
     {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
   </ul>
-{% endif %}
-<ul>
+  {% endif %}
+  <ul>
     <li><h1>{{ profile_detail.username }}</h1></li>
     <li><h1>{{ profile_detail.nickname }}</h1></li>
+    {% if profile_detail.profile_photo %}
+    <li><img src="{{ profile_detail.profile_photo.url }}" alt="Profile Photo"></li>
+  {% endif %}
     <li><h1>{{ profile_detail.email }}</h1></li>
-</ul>
-<form action="{% url 'accounts:image_upload' username=user.username %}" method="POST" enctype="multipart/form-data">
+  </ul>
+  <form action="{% url 'accounts:image_upload' username=user.username %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="file" name="image" accept="image/*">
     <input type="submit" value="업로드">
+
 </form>
 {% if request.user != person %}
     <div>
@@ -28,6 +47,31 @@
     </div>
 {% endif %}
 
+<div class="profile--box">
+  <h1>{{ profile_detail.last_name }}님의 프로필 페이지</h1>
+</div>
+<div class="profile--card">
+{% comment %} <div class="profile--image--box rounded-circle">
+  {% if person.image %}
+    <img src="{{ person.image.url }}" alt="" class="profile--img">
+  {% else %}
+    <img src="{% static 'image/no-profile-image.png' %}" alt="" class="profile--img">
+  {% endif %}
+</div> {% endcomment %}
+<div class="profile--card--txt">
+  <div class='d-flex align-items-center'>
+    <p class="mb-0">ID : {{ profile_detail.username }}
+      {% if request.user == person %}
+        <a href="{% url 'accounts:update' %}" class="profile--account--a">수정</a>
+        <form action="{% url 'accounts:delete' %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" class="profile--deleteBtn" value="탈퇴" onclick="return confirm('탈퇴 시, 더 이상 서비스를 이용하실 수 없습니다.\n정말 탈퇴하시겠습니까?')">
+        </form> 
+      {% endif %}
+  </div>
+
+</div>
+{% endblock content %}
 <script>
 $(document).ready(function() {
 $('.follow-button').on('click', function(e) {

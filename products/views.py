@@ -29,14 +29,15 @@ def update(request, product_pk):
                 form.save()        
                 return redirect('products:detail', product.pk)
         else:
-            form = ProductForm(nstance=product)
+            form = ProductForm(instance=product)  
     else:
-        return redirect('products:detail',product.pk)
+        return redirect('products:detail', product.pk)
     context = {
-        'form':form,
-        'product':product,
+        'form': form,
+        'product': product,
     }
-    return render(request, 'products/upate.html', context)
+    return render(request, 'products/update.html', context)
+
 
 
 def delete(request, product_pk):
@@ -59,14 +60,14 @@ def detail(request, product_pk):
 
 def likes(request, product_pk):
     product = Product.objects.get(pk=product_pk)
-    if request.user in product.like_users.all():
-        product.like_users.remove(request.user)
+    if request.user in product.like_product.all():
+        product.like_product.remove(request.user)
         is_liked = False
     else:
-        product.like_users.add(request.user)
+        product.like_product.add(request.user)
         is_liked = True
     context = {
         'is_liked': is_liked,
-        'product_likes_count': product.like_users.count(), #좋아요 수 표시
-            }
+        'product_likes_count': product.like_product.count(), # 좋아요 수 표시
+    }
     return JsonResponse(context)
