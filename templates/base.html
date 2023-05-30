@@ -55,7 +55,7 @@
             <img src="{% static 'image/no-profile-img.png' %}" alt="" class="object-fit-fill profile">
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'accounts:profile' user %}">{{ user }}</a></li>
+            {% comment %} <li><a class="dropdown-item" href="{% url 'accounts:profile' user %}">{{ user }}</a></li> {% endcomment %}
             <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
           </ul>
         </div>
