@@ -23,5 +23,29 @@
     {{comment.user}}
     {{comment.content}}
     {% endfor %} {% endcomment %}
-  </div>   
-{% endblock  %}
+  </div>
+
+<form action="{% url 'products:likes' product.pk %}" method="POST">
+  {% csrf_token %}
+  {% if request.user in product.like_product.all %}
+    <input type="submit" value="좋아요 취소">
+  {% else %}
+    <input type="submit" value="좋아요">
+  {% endif %}
+</form>
+
+ <form action="{% url 'products:delete' product.pk %}" method='POST'>
+     {% csrf_token %}
+     <input type='submit' value='삭제' onclick="return confirm('삭제 하시겠습니까?')">
+ </form>
+
+<form action="{% url 'products:update' product.pk %}" method="POST">
+    {% csrf_token %}
+    {{ product_form.as_p }}
+    <input type="submit" value="UPDATE">
+</form>
+
+<a href="{% url 'products:update' product.pk %}">[UPDATE]</a>
+
+
+{% endblock %}

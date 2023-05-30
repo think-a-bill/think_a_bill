@@ -63,15 +63,112 @@ class CustomUserCreationForm(UserCreationForm):
         ),
     )
 
-    
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('username', 'nickname', 'email','last_name', 'password1', 'password2', 'birthday')
+        fields = ('username', 'email','last_name', 'password1', 'password2', 'birthday')
 
 # 유저 계정 수정
 class CustomUserChangeForm(UserCreationForm):
-  class Meta(UserChangeForm.Meta):
-    model = get_user_model()
-    fields = ('username', 'nickname', 'email','last_name', 'password1', 'password2', 'birthday')
+    email = forms.EmailField(
+        label= False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '이메일을 입력하세요',
+                'style' : 'width: 400px;'
+            }
+        )
+    )
+    last_name = forms.CharField(
+        label= False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': '이름을 입력하세요',
+                'style' : 'width: 400px;'
+            }
+        )
+    )
+    
+    birthday = forms.DateField(
+        initial=datetime.date(2000, 1, 1),
+        label=False,
+        widget=forms.DateInput(
+            attrs={
+                'type':'date',
+                'class': 'form-control',
+            }
+        ),
+    )
+
+    image = forms.ImageField(
+        label=False,
+        required=False,
+        widget=forms.ClearableFileInput(
+        attrs={
+            'class': 'form-control',
+            }
+        )
+    )
+    password=None
+
+    class Meta(UserChangeForm.Meta):
+        model = get_user_model()
+        fields = ('email', 'last_name', 'birthday', 'image')
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(
+        label=False,
+        widget=forms.TextInput(
+            attrs = {
+                'class': 'form-control',
+                'placeholder' : '아이디',
+                'style' : 'width:400px;'
+            }
+        )
+    )
+    password = forms.CharField(
+        label=False,
+        widget=forms.PasswordInput(
+            attrs = {
+                'class': 'form-control',
+                'placeholder' : '비밀번호',
+                'style' : 'width:400px;'
+            }
+        )
+    )
 
 # 비밀번호 변경
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label=False,
+        widget=forms.PasswordInput(
+            attrs = {
+                'class': 'form-control',
+                'placeholder' : '기존 비밀번호',
+                'style' : 'width:400px;'
+            }
+        )
+    )
+    new_password1 = forms.CharField(
+        label=False,
+        widget= forms.PasswordInput(
+        attrs = {
+                'class': 'form-control',
+                'placeholder' : '새 비밀번호',
+                'style' : 'width:400px;'
+            }
+        ),
+        help_text='',
+    )
+    new_password2 = forms.CharField(
+        label=False,
+        widget= forms.PasswordInput(
+        attrs = {
+                'class': 'form-control',
+                'placeholder' : '새 비밀번호(확인)',
+                'style' : 'width:400px;'
+            }
+        ),
+        help_text='',
+    )
