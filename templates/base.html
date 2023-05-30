@@ -55,7 +55,7 @@
             <img src="{% static 'image/no-profile-img.png' %}" alt="" class="object-fit-fill profile">
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'accounts:profile' user %}">{{ user }}</a></li>
+            {% comment %} <li><a class="dropdown-item" href="{% url 'accounts:profile' user %}">{{ user }}</a></li> {% endcomment %}
             <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
           </ul>
         </div>
@@ -63,7 +63,7 @@
       {% else %}
       <div class="dropdown">
         <button class="profile--image rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="{% static 'image/no-profile-img.png' %}" alt="" class="object-fit-fill profile">
+          {% comment %} <img src="{% static 'image/no-profile-img.png' %}" alt="" class="object-fit-fill profile"> {% endcomment %}
         </button>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a></li>
@@ -95,3 +95,20 @@
 {% block script %}
 {% endblock script %}
 </body>
+
+
+{% comment %} 
+db에서 문제가 있을 때
+
+db.sqlite3 삭제
+프로젝트에 있는 모든 마이그레이션 파일을 삭제
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+
+find . -path "*/migrations/*.pyc"  -delete
+
+장고 재설치 -> 
+pip install --upgrade --force-reinstall Django
+python manage.py makemigrations
+python manage.py migrate
+db.sqlite3 삭제시 회원 정보까지 삭제됨 
+{% endcomment %}
