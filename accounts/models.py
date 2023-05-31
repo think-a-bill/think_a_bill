@@ -5,6 +5,6 @@ from django.db import models
 # Create your models here.
 class User(AbstractUser):
     nickname = models.CharField(max_length=20)
-    profile_photo = models.ImageField(blank=True, upload_to='images/profiles/%Y/%m/%d/')
+    image = models.ImageField(blank=True, null=True, upload_to='images/profiles/%Y/%m/%d/')
     birthday = models.DateField(blank=False,)
     follow = models.ManyToManyField('self',symmetrical=False,related_name='followers')

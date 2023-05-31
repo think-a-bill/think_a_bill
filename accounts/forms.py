@@ -68,7 +68,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email','last_name', 'password1', 'password2', 'birthday')
 
 # 유저 계정 수정
-class CustomUserChangeForm(UserCreationForm):
+class CustomUserChangeForm(UserChangeForm):
     email = forms.EmailField(
         label= False,
         widget=forms.TextInput(
@@ -101,7 +101,7 @@ class CustomUserChangeForm(UserCreationForm):
         ),
     )
 
-    profile_photo = forms.ImageField(
+    image = forms.ImageField(
         label=False,
         required=False,
         widget=forms.ClearableFileInput(
@@ -114,7 +114,7 @@ class CustomUserChangeForm(UserCreationForm):
 
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
-        fields = ('email', 'last_name', 'birthday', 'profile_photo')
+        fields = ('email', 'last_name', 'birthday', 'image')
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(

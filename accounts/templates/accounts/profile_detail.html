@@ -24,7 +24,7 @@
     <li><h1>{{ profile_detail.username }}</h1></li>
     <li><h1>{{ profile_detail.nickname }}</h1></li>
     {% if profile_detail.profile_photo %}
-    <li><img src="{{ profile_detail.profile_photo.url }}" alt="Profile Photo"></li>
+    <li><img src="{{ profile_detail.image.url }}" alt="Profile Photo"></li>
   {% endif %}
     <li><h1>{{ profile_detail.email }}</h1></li>
   </ul>
