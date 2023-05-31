@@ -2,6 +2,8 @@ from django.urls import path, reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 from .views import CustomPasswordChangeView
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'accounts'
 urlpatterns = [
@@ -15,4 +17,4 @@ urlpatterns = [
     # path('<username>/follow/',views.follow,name='follow'),
     path('toggle-follow/', views.toggle_follow, name='toggle_follow'),
     path('<username>/image/',views.image_upload,name='image_upload')
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -101,7 +101,7 @@ class CustomUserChangeForm(UserCreationForm):
         ),
     )
 
-    image = forms.ImageField(
+    profile_photo = forms.ImageField(
         label=False,
         required=False,
         widget=forms.ClearableFileInput(
@@ -114,7 +114,7 @@ class CustomUserChangeForm(UserCreationForm):
 
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
-        fields = ('email', 'last_name', 'birthday', 'image')
+        fields = ('email', 'last_name', 'birthday', 'profile_photo')
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(
