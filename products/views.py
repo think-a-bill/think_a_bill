@@ -71,3 +71,12 @@ def likes(request, product_pk):
         'product_likes_count': product.like_product.count(), # 좋아요 수 표시
     }
     return JsonResponse(context)
+
+
+# 상품 리스트 
+def product_list(request):
+    products = Product.objects.all()
+    context = {
+        'products': products,
+    }
+    return render(request, 'products/product_list.html', context)

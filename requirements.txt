@@ -9,3 +9,4 @@ Pillow==9.5.0
 pytz==2023.3
 sqlparse==0.4.4
 typing_extensions==4.6.1
+axios==0.4.0
