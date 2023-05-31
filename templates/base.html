@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
   <title>{% block title %}{% endblock title %}</title>
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
@@ -17,23 +18,27 @@
 <body>
   <nav>
     <div class="nav--logo">
-      <a href="{% url 'posts:index' %}">Think-A-Bill</a>
+      <i class="fa-solid fa-piggy-bank fa-2xl" style="color: #3a6845;"></i>
+      <a href="{% url 'posts:index' %}" style="padding-left:5px;">Think-A-Bill</a>
     </div>
     <div class="nav--right">
-    {% block search-bar %}
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'posts:create' %}"><i class="fa-solid fa-pencil fa-lg" style="color: #97ad94;"></i></a>
+      {% endif %}
+      {% block search-bar %}
       <div class="nav--search">
         <form action="{% url 'posts:search' %}" method="GET" class="search">
           <div>
             <input type="search" placeholder='검색어를 입력하세요!' name='q' style="padding-left:16px;">
-            <button class="search-btn" type="submit"> 
-              <svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#C24914"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#C24914" fill-rule="evenodd" d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z"></path> </g></svg>
+            <button class="search-btn" type="submit">
+              <i class="fa-solid fa-magnifying-glass" style="color: #183f20;"></i>
             </button>
           </div>
         </form>
       </div>
       <div class="nav--search--mobile">
-        <button id="search-icon" class="search-btn"> 
-          <svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#C24914"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#C24914" fill-rule="evenodd" d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z"></path> </g></svg>
+        <button id="search-icon" class="search-btn">
+          <i class="fa-solid fa-magnifying-glass" style="color: #183f20;"></i>
         </button>
       </div>
       {% endblock search-bar %}
@@ -52,7 +57,7 @@
           {% else %}
           <div class="dropdown">
             <button class="profile--image rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{% static 'image/no-profile-img.png' %}" alt="" class="object-fit-fill profile">
+              <i class="fa-solid fa-user fa-xl" style="color: #1f4726"></i>
             </button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'accounts:detail' user %}">{{ user }}</a></li>
@@ -80,7 +85,7 @@
       <form action="{% url 'posts:search' %}" method="GET" class="position-relative search-mobile">
         <input type="search" placeholder='검색어를 입력하세요!' name='q' style="padding-left:16px;" class="offcanvas-search">
         <button class="search-btn" type="submit"> 
-          <svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#C24914"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#C24914" fill-rule="evenodd" d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z"></path> </g></svg>
+          <i class="fa-solid fa-magnifying-glass" style="color: #183f20;"></i>
         </button>
       </form>
     </div>
