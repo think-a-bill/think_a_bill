@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from .forms import ProductForm
 from .models import Product
 from posts.forms import CommentForm
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+@login_required  
 def create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -19,6 +20,7 @@ def create(request):
         'product_form': form,
     }
     return render(request, 'products/create.html', context)
+
 
 def update(request, product_pk):
     product = Product.objects.get(pk=product_pk)
