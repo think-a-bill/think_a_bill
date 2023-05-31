@@ -14,5 +14,5 @@ urlpatterns = [
     path('<username>/',views.profile_detail,name='detail'),
     # path('<username>/follow/',views.follow,name='follow'),
     path('toggle-follow/', views.toggle_follow, name='toggle_follow'),
-    path('<username>/image/',views.image_upload,name='image_upload')
+    # path('<username>/image/',views.image_upload,name='image_upload')
 ]

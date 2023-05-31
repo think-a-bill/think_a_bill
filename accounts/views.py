@@ -48,14 +48,14 @@ def signup(request):
 
 @login_required
 def account_edit(request):
-  instance = get_object_or_404(User,pk=request.user.pk)
+  # instance = get_object_or_404(User,pk=request.user.pk)
   if request.method == 'POST':
-    form = CustomUserChangeForm(request.POST,instance=instance)
+    form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
     if form.is_valid():
        form.save()
-       return redirect('posts:index')
+       return redirect('accounts:detail', request.user)
   else:
-    form = CustomUserChangeForm(instance=instance)
+    form = CustomUserChangeForm(instance=request.user)
   context = {
     'form' : form
   }
@@ -70,18 +70,24 @@ def delete(request):
   return redirect('posts:index')
 
 
-class profiledetailview(DetailView):
-  model = User
-  template_name = 'accounts/profile_detail.html'
-  context_object_name = 'details'
+# class profiledetailview(DetailView):
+#   model = User
+#   template_name = 'accounts/profile_detail.html'
+#   context_object_name = 'details'
 
 def profile_detail(request,username):
   # 어차피 해당 유저의 프로필을 보여줌.
-  profile_detail = User.objects.get(username=username)
+  # profile_detail = User.objects.get(username=username)
+  # context = {
+  #   'profile_detail' : profile_detail,
+  # }
+  # return render(request,'accounts/profile_detail.html',context)
+  User = get_user_model()
+  person = User.objects.get(username=username)
   context = {
-    'profile_detail' : profile_detail,
+      'person': person,
   }
-  return render(request,'accounts/profile_detail.html',context)
+  return render(request, 'accounts/profile_detail.html', context)
 
 @login_required
 def follow(request,username):
@@ -97,17 +103,17 @@ def follow(request,username):
       # 현재 있는 페이지로 리다이렉트
   return redirect('accounts:detail', username=person.username)
 
-@login_required
-def image_upload(request,username):
-  if request.method == 'POST':
-    user_model = User.objects.get(username=username)
-    image_data = request.FILES['image']
-    user_model.image = image_data
-    user_model.save()
-    messages.info(request, '이미지가 정상적으로 업로드 되었습니다.')
-    return redirect('accounts:detail' ,username=username)
-  else:
-    return HttpResponse('GET request')
+# @login_required
+# def image_upload(request,username):
+#   if request.method == 'POST':
+#     user_model = User.objects.get(username=username)
+#     image_data = request.FILES['image']
+#     user_model.image = image_data
+#     user_model.save()
+#     messages.info(request, '이미지가 정상적으로 업로드 되었습니다.')
+#     return redirect('accounts:detail' ,username=username)
+#   else:
+#     return HttpResponse('GET request')
 
 
 @login_required
