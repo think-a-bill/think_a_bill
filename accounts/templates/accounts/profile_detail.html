@@ -28,13 +28,12 @@
   {% endif %}
     <li><h1>{{ profile_detail.email }}</h1></li>
   </ul>
-  <form action="{% url 'accounts:image_upload' username=user.username %}" method="POST" enctype="multipart/form-data">
+  {% comment %} <form action="{% url 'accounts:image_upload' username=user.username %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %} 
     <input type="file" name="image" accept="image/*">
     <input type="submit" value="업로드">
-
-</form>
-{% if request.user != person %}
+  </form> {% endcomment %}
+{% comment %} {% if request.user != person %}
     <div>
       <form class="mt-2" id="follow-form" data-user-id="{{ person.pk }}">
         {% csrf_token %}
@@ -45,36 +44,137 @@
         {% endif %}
       </form>
     </div>
-{% endif %}
+{% endif %} {% endcomment %}
 
 <div class="profile--box">
-  <h1>{{ profile_detail.last_name }}님의 프로필 페이지</h1>
-</div>
-<div class="profile--card">
-{% comment %} <div class="profile--image--box rounded-circle">
-  {% if person.image %}
-    <img src="{{ person.image.url }}" alt="" class="profile--img">
-  {% else %}
-    <img src="{% static 'image/no-profile-image.png' %}" alt="" class="profile--img">
-  {% endif %}
-</div> {% endcomment %}
-<div class="profile--card--txt">
-  <div class='d-flex align-items-center'>
-    <p class="mb-0">ID : {{ profile_detail.username }}
-      {% if request.user == person %}
-        <a href="{% url 'accounts:update' %}" class="profile--account--a">수정</a>
-        <form action="{% url 'accounts:delete' %}" method="POST">
-          {% csrf_token %}
-          <input type="submit" class="profile--deleteBtn" value="탈퇴" onclick="return confirm('탈퇴 시, 더 이상 서비스를 이용하실 수 없습니다.\n정말 탈퇴하시겠습니까?')">
-        </form> 
+  <h1>{{ person.last_name }}님의 프로필 페이지</h1>
+  <div class="profile--card">
+    <div class="profile--image--box rounded-circle">
+      {% if person.image %}
+        <img src="{{ person.image.url }}" alt="" class="profile--img">
+      {% else %}
+        <i class="fa-solid fa-user fa-xl" style="color: #1f4726"></i>
       {% endif %}
-  </div>
+    </div>
+    <div class="profile--card--txt">
+      <div class='d-flex align-items-center'>
+        <p class="mb-0">ID : {{ person.username }}
+          {% if request.user == person %}
+            <a href="{% url 'accounts:account_edit' %}" class="profile--account--a">수정</a>
+            <form action="{% url 'accounts:delete' %}" method="POST">
+              {% csrf_token %}
+              <input type="submit" class="profile--deleteBtn" value="탈퇴" onclick="return confirm('탈퇴 시, 더 이상 서비스를 이용하실 수 없습니다.\n정말 탈퇴하시겠습니까?')">
+            </form> 
+          {% endif %}
+      </div>
 
+      {% if request.user != person %}
+            <div>
+              <form id="follow-form" data-user-id="{{ person.pk }}">
+                {% csrf_token %}
+                {% if request.user in person.followers.all %}
+                  <input class="profile--followbtn" type="submit" value="Unfollow">
+                {% else %}
+                  {% if request.user.is_authenticated %}
+                    <input class="profile--followbtn" type="submit" value="follow">
+                  {% else %}
+                    <input class="profile--followbtn" type="submit" value="follow" disabled>
+                  {% endif %}
+                {% endif %}
+              </form>
+            </div>
+          {% endif %}
+        </p>
+        <p>이메일 : {{ person.email }}</p>
+        <p>생년월일 : {{ person.birthday }}</p>
+        <!-- 팔로워 모달 버튼 -->
+        <div>
+          <button type="button" class="profile--followbtn" data-bs-toggle="modal" data-bs-target="#followersModal">
+            <span id="followers-count">{{ person.followers.all|length }}</span> 팔로워
+          </button>
+
+          <!-- 팔로잉 모달 버튼 -->
+          <button type="button" class="profile--followbtn" data-bs-toggle="modal" data-bs-target="#followingsModal">
+            <span id = 'followings-count'>{{ person.followings.all|length }}</span> 팔로잉 
+          </button>
+        </div>
+          <!-- 팔로워 Modal -->
+          <div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content profile--modal--box">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5"  id="followersModalLabel">팔로워</h1>
+                </div>
+                <div class="modal-body row" id = "f_follower_list">
+                  {% if request.user == person %}
+                    {% for follower in person.followers.all %}
+                      <div class="modal--profile--card col-3">
+                        <a class="text-decoration-none link-secondary fw-bold modal--profile--link" href="{% url 'accounts:profile' follower.username %}">
+                          {% if follower.image %}
+                            <div class="profile--image rounded-circle">
+                              <img src="{{ follower.image.url }}" alt="" class="object-fit-fill profile">
+                            </div>
+                          {% else %}
+                            <div class="profile--image rounded-circle">
+                              <img src="{% static 'image/profile-none.png' %}" alt="profile_image_none" class="object-fit-fill profile">
+                            </div>
+                          {% endif %}
+                          <span>{{ follower }}</span></a>
+                      </div>
+                    {% endfor %}
+                  {% else %}
+                      <div class="row" id="followers-list"></div>
+                  {% endif %}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="profile--followbtn" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 팔로잉 Modal -->
+          <div class="modal fade" id="followingsModal" tabindex="-1" aria-labelledby="followingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content profile--modal--box">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="followingsModalLabel">팔로잉</h1>
+                </div>
+                <div class="modal-body row">
+                  {% for following in person.followings.all %}
+                  <div class="modal--profile--card col-3">
+                    <a class="text-decoration-none link-secondary fw-bold modal--profile--link" href="{% url 'accounts:profile' following.username %}">
+                      {% if following.image %}
+                        <div class="profile--image rounded-circle">
+                          <img src="{{ following.image.url }}" alt="" class="object-fit-fill profile">
+                        </div>
+                      {% else %}
+                        <div class="profile--image rounded-circle">
+                          <img src="{% static 'image/profile-none.png' %}" alt="profile_image_none" class="object-fit-fill profile">
+                        </div>
+                      {% endif %}
+                      <span>{{ following }}</span></a>
+                  </div>
+                  {% endfor %}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="profile--followbtn" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  </div>
 </div>
 {% endblock content %}
-{% block script %}
+{% comment %} {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="{% static 'js/profile.js' %}"></script>
+  <script src="{% static '/js/profile.js' %}"></script>
   <script>
     const triggerTabList = document
       .querySelectorAll('#myTab button')triggerTabList
@@ -88,4 +188,4 @@
           })
       })
   </script>
-{% endblock script %}
+{% endblock script %} {% endcomment %}
