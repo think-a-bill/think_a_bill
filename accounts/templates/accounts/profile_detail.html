@@ -29,21 +29,21 @@
     <li><h1>{{ profile_detail.email }}</h1></li>
   </ul>
   <form action="{% url 'accounts:image_upload' username=user.username %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+    {% csrf_token %} 
     <input type="file" name="image" accept="image/*">
     <input type="submit" value="업로드">
 
 </form>
 {% if request.user != person %}
     <div>
-        <form action="{% url 'accounts:toggle_follow' %}" method="POST">
-            {% csrf_token %}
+      <form class="mt-2" id="follow-form" data-user-id="{{ person.pk }}">
+        {% csrf_token %}
         {% if request.user in person.followers.all %}
-            <input type="submit" value="Unfollow">
+          <input type="submit" value="언팔로우" class="btn btn-dark">
         {% else %}
-            <input type="submit" value="follow">
+          <input type="submit" value="팔로우" class="btn btn-dark">
         {% endif %}
-        </form>
+      </form>
     </div>
 {% endif %}
 
@@ -72,29 +72,20 @@
 
 </div>
 {% endblock content %}
-<script>
-$(document).ready(function() {
-$('.follow-button').on('click', function(e) {
-    e.preventDefault();
-    var user_pk = $(this).data('user-pk');
-    var button = $(this);
-
-    $.ajax({
-        url: '/toggle-follow/',
-        type: 'POST',
-        data: {'user_pk': user_pk},
-        dataType: 'json',
-        success: function(response) {
-            if (response.is_following) {
-                button.text('Unfollow');
-            } else {
-                button.text('Follow');
-            }
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
-        }
-    });
-});
-});
-</script>
+{% block script %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="{% static 'js/profile.js' %}"></script>
+  <script>
+    const triggerTabList = document
+      .querySelectorAll('#myTab button')triggerTabList
+      .forEach(triggerEl => {
+        const tabTrigger = new bootstrap
+          .Tab(triggerEl)triggerEl
+          .addEventListener('click', event => {
+            event
+              .preventDefault()tabTrigger
+              .show()
+          })
+      })
+  </script>
+{% endblock script %}
