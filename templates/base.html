@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
   <title>{% block title %}{% endblock title %}</title>
   {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/base.css' %}">
   <link rel="icon" href="{% static 'image/money_log.png' %}">
   {% block head %}{% endblock head %}
   {% block style %}{% endblock style %}
@@ -19,7 +19,12 @@
   <nav>
     <div class="nav--logo">
       <i class="fa-solid fa-piggy-bank fa-2xl" style="color: #3a6845;"></i>
-      <a href="{% url 'posts:index' %}" style="padding-left:5px;">Think-A-Bill</a>
+      <a href="{% url 'main' %}" style="padding-left:5px;">Think-A-Bill</a>
+      <ul class="nav--list">
+        <li><a href="{% url 'posts:index' %}" style="padding-left:10px;">정보공유</a></li>
+        <li><a href="{% url 'products:product_list' %}" style="padding-left:10px;">상품</a></li>
+        {% comment %} <li><a href="{% url 'books:index' %}" style="padding-left:5px;">Book</a></li> {% endcomment %}
+      </ul>
     </div>
     <div class="nav--right">
       {% if request.user.is_authenticated %}

@@ -5,13 +5,6 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'MyLotteBold';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.0/MyLotteBold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  }
-
   @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
@@ -29,6 +22,13 @@
 @font-face {
   font-family: 'omyu_pretty';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cafe24Ssurround';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -162,10 +162,12 @@ ul li {
 
 /* Nav */
 
-/* .nav--logo {
-  padding-left: 20px;
+.nav--logo {
+  display: flex;
+  padding-top: 15px;
 }
 
+/*
 @media screen and (max-width: 992px) {
   .nav--logo {
     grid-row: 1 / 2;
@@ -181,7 +183,9 @@ ul li {
 } */
 
 .nav--logo i{
-  size: 30px;
+  size: 40px;
+  padding-top: 25px;
+  padding-right: 10px;
 }
 
 .nav--logo a{
@@ -189,6 +193,27 @@ ul li {
   color: rgb(58, 104, 69);
   font-size: 30px;
   font-family: 'PyeongChangPeace-Bold';
+  padding-top: 5px;
+}
+
+.nav--list {
+  list-style: none;
+  display: flex;
+  padding-left: 50px;
+  margin-left: 50px;
+  padding-top: 8px;
+  margin-top: 9px;
+}
+
+.nav--list li {
+  margin-right: 10px;
+}
+
+.nav--list li a {
+  text-decoration: none;
+  color: #5b7c51;
+  font-family: 'Cafe24Ssurround';
+  font-size: 20px;
 }
 
 .nav--right {

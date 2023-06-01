@@ -4,27 +4,32 @@
 {{post.title}}
 {% endblock title %}
 {% block head %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/detail.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/detail.css' %}">
+  {% block style %}{% endblock style %}
 {% endblock head %}
 
 {% block content %}
   <div class="detail--box">
-    {{post.title}}<br>
-    {{post.category}}<br>
-    {% if post.image %}
-    <img src="{{ post.image.url }}" alt="Post Image"><br>
-    {% endif %}
-    {{post.content}}<br>
-    <div>
-        {% for tag in tags %}
-        <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
-    {% endfor %}
+    <div class="detail--info">
+      <p class="detail--title">제목 : {{post.title}}<br></p>
+      <p class="detail--category">분류 : {{post.category}}</p><br>
+      {% if post.image %}
+      <img src="{{ post.image.url }}" alt="Post Image"><br>
+      {% endif %}
+      {{post.content}}<br>
+      <div>
+          {% for tag in tags %}
+          <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
+      {% endfor %}
+      </div>
+      {% for comment in comments %}
+      {{comment.user}}
+      {{comment.content}}
+      {% endfor %}
     </div>
-    {% for comment in comments %}
-    {{comment.user}}
-    {{comment.content}}
-    {% endfor %}
   </div>   
+
+{% endblock content %}
 
 
 {% if request.user.is_authenticated %}
