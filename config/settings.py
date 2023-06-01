@@ -12,10 +12,19 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from django.urls import reverse_lazy
+from django.core.cache import cache
+from django.conf import settings
+from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = Env()
+env_path = settings.BASE_DIR / '.env'
+
+if env_path.exists():
+     with env_path.open(encoding='utf8') as f:
+         env.read_env(f,overwrite=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -26,19 +35,23 @@ SECRET_KEY = 'django-insecure-fa)=b)@qutru-!*m(b1h^c^&ewycwqft(yk6*jh+r=q3vl)g1&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'accounts',
     'posts',
     'products',
     'chats',
     'taggit',
+    'django_bootstrap5',
     'taggit_templatetags2',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -76,7 +90,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+ASGI_APPLICATION = 'config.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -88,7 +102,20 @@ DATABASES = {
     }
 }
 
+# django channels layer
 
+if 'CHANNEL_LAYER_REDIS_URL' in env:
+    channel_layer_redis = env.db_url('CHANNEL_LAYER_REDIS_URL')
+
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                'hosts': channel_layer_redis['HOST'],
+            },
+        },
+    }
+REDIS_HOSTS = ['localhost', '127.0.0.1']
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block content %}
+<h2>채팅방 : {{ room_name }}</h2>
+
+{# TODO: 웹소켓으로 실시간 채팅 기능 구현하기 #}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card" style="height:600px;">
+                <div class="card-body over-flow-hidden">
+                    <div id="chat_messaged" class="w-100 h-100 border-0 overflow-scroll"></div>
+                </div>
+                    <div class="card-footer">
+                        <form action="" id="message_form">
+                            <input type="text" name="message" class="form-control">
+                        </form>
+                    </div>
+            </div>
+            <hr class="my-3"/>
+            <a href="{% url 'chats:index' %}" class="btn btn-primary">대기실로 이동</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script>
+const handlers = {
+    chat_message_tag:null,
+    init(){
+        this.document.querySelector("#Chat_messages").addEventListener('submit',this.onsubmit.bind(this));
+    }
+    onsubmit(event){
+        event.preventDefault();
+
+        const form_data = new FormData(event.target);
+        cont props = Object.fromEntries(form_data);
+        event.target.reset(); // reset form
+        const { message } = props;
+        console.log('웹소켓으로 전송할 메세지 :', message);
+    }
+}
+</script>
+{% endblock %}
