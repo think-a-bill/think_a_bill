@@ -12,7 +12,9 @@
   <div class="detail--box">
     {{product.title}}<br>
     {{product.category}}<br>
+    {% if product.image %}
     <img src="{{ product.image.url }}" alt="Product Image"><br>
+    {% endif %}
     {{product.content}}<br>
     <div>
         {% for tag in tags %}
@@ -25,14 +27,18 @@
     {% endfor %} {% endcomment %}
   </div>
 
-<form action="{% url 'products:likes' product.pk %}" method="POST">
-  {% csrf_token %}
-  {% if request.user in product.like_product.all %}
-    <input type="submit" value="좋아요 취소">
-  {% else %}
-    <input type="submit" value="좋아요">
-  {% endif %}
+
+
+{% if request.user.is_authenticated %}
+<form id="like-form" data-product-id="{{ product.pk }}">
+    {% csrf_token %}
+    {% if request.user in product.like_product.all %}
+    <button type="submit">♥</button>
+    {% else %}
+    <button type="submit">♡</button>
+    {% endif %}
 </form>
+{% endif %}
 
  <form action="{% url 'products:delete' product.pk %}" method='POST'>
      {% csrf_token %}
@@ -43,4 +49,38 @@
 <a href="{% url 'products:update' product.pk %}">[UPDATE]</a>
 
 
+
+
 {% endblock %}
+
+{% block script %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const likeForm = document.querySelector('#like-form');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    likeForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const productId = this.dataset.productId;
+      axios({
+        method: 'post',
+        url: `/products/${productId}/likes/`,
+        headers: {
+          'X-CSRFToken': csrfToken
+        }
+      })
+        .then((response) => {
+          console.log(response);
+          const isLiked = response.data.is_liked;
+          const likeBtn = document.querySelector('#like-form > button[type=submit]');
+          if (isLiked === true) {
+            likeBtn.innerText = '♥';
+          } else {
+            likeBtn.innerText = '♡';
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  </script>
+{% endblock script %}
