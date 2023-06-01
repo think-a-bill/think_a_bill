@@ -25,4 +25,87 @@
     {{comment.content}}
     {% endfor %}
   </div>   
+
+
+{% if request.user.is_authenticated %}
+<form id="post-like-form" data-post-id="{{ post.pk }}">
+    {% csrf_token %}
+    {% if request.user in post.like_post.all %}
+    <button type="submit">♥</button>
+    {% else %}
+    <button type="submit">♡</button>
+    {% endif %}
+</form>
+{% endif %} 
+
+{% comment %} <div id="post-likes-count">
+  {{ post_likes_count }} Likes
+</div> {% endcomment %}
+<span id="post-likes-count">{{ post.like_posts.all|length }}</span>
 {% endblock  %}
+
+{% block script %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  // 방법 1
+    {% comment %} const postLikesCount = document.querySelector('#post-likes-count');
+    const likeForm = document.querySelector('#post-like-form');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const postId = likeForm.dataset.postId;
+  
+    function updateLikesCount(count) {
+      postLikesCount.innerText = count + ' Likes';
+    }
+  
+    likeForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      axios({
+        method: 'post',
+        url: `/posts/${postId}/likes/`,
+        headers: {
+          'X-CSRFToken': csrfToken
+        }
+      })
+        .then((response) => {
+          console.log(response);
+          const isLiked = response.data.is_liked;
+          const likesCount = response.data.post_likes_count;
+          const likeBtn = document.querySelector('#post-like-form > button[type=submit]');
+          if (isLiked === true) {
+            likeBtn.innerText = '♥';
+          } else {
+            likeBtn.innerText = '♡';
+          }
+          updateLikesCount(likesCount);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }); {% endcomment %}
+// 방법 2
+    const form = document.querySelector('#post-like-form')
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    form.addEventListener('submit', function (event) {
+    event.preventDefault()
+    const postId = event.target.dataset.postId
+    axios({
+      method: 'post',
+      url: `/posts/${postId}/likes/`,
+      headers: {'X-CSRFToken': csrftoken},
+  })
+    .then((response) => {
+      const isLiked = response.data.is_liked
+      const likeBtn = document.querySelector('#post-like-form > button[type=submit]')
+      
+      if (isLiked === true) {
+        likeBtn.innerText = '♥';
+      } else {
+        likeBtn.innerText = '♡';
+      }
+      const likesCountTag = document.querySelector('#post-likes-count')
+      const likesCountData = response.data.post_likes_count
+      likesCountTag.textContent = likesCountData
+    })
+})
+  </script>
+{% endblock script %}

@@ -68,7 +68,7 @@ def likes(request, product_pk):
         is_liked = True
     context = {
         'is_liked': is_liked,
-        'product_likes_count': product.like_product.count(), # 좋아요 수 표시
+        'product_likes_count': product.like_product.count(),
     }
     return JsonResponse(context)
 

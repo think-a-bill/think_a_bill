@@ -63,7 +63,7 @@ def update(request, post_pk):
                     post.tags.add(tag.strip())
                 return redirect('posts:detail', post.pk)
         else:
-            form = PostForm(nstance=post)
+            form = PostForm(instance=post)
     else:
         return redirect('posts:detail',post.pk)
     context = {
@@ -92,17 +92,18 @@ def detail(request, post_pk):
     return render(request, 'posts/detail.html', context)
 
 
+
 def likes(request, post_pk):
     post = Post.objects.get(pk=post_pk)
-    if request.user in post.like_users.all():
-        post.like_users.remove(request.user)
+    if request.user in post.like_post.all():
+        post.like_post.remove(request.user)
         is_liked = False
     else:
-        post.like_users.add(request.user)
+        post.like_post.add(request.user)
         is_liked = True
     context = {
         'is_liked': is_liked,
-        'post_likes_count': post.like_users.count(), #좋아요 수 표시
+        'post_likes_count': post.like_post.count(), # 좋아요 개수 반환
     }
     return JsonResponse(context)
 
