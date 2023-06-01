@@ -12,12 +12,14 @@
   <div class="detail--box">
     {{product.title}}<br>
     {{product.category}}<br>
+    {% if product.image %}
     <img src="{{ product.image.url }}" alt="Product Image"><br>
+    {% endif %}
     {{product.content}}<br>
     <div>
         {% for tag in tags %}
         <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
-    {% endfor %}
+        {% endfor %}
     </div>
     {% comment %} {% for comment in comments %}
     {{comment.user}}
@@ -25,27 +27,58 @@
     {% endfor %} {% endcomment %}
   </div>
 
-<form action="{% url 'products:likes' product.pk %}" method="POST">
-  {% csrf_token %}
-  {% if request.user in product.like_product.all %}
-    <input type="submit" value="좋아요 취소">
-  {% else %}
-    <input type="submit" value="좋아요">
-  {% endif %}
-</form>
-
- <form action="{% url 'products:delete' product.pk %}" method='POST'>
-     {% csrf_token %}
-     <input type='submit' value='삭제' onclick="return confirm('삭제 하시겠습니까?')">
- </form>
-
-<form action="{% url 'products:update' product.pk %}" method="POST">
+{% if request.user.is_authenticated %}
+<form id="like-form" data-product-id="{{ product.pk }}">
     {% csrf_token %}
-    {{ product_form.as_p }}
-    <input type="submit" value="UPDATE">
+    {% if request.user in product.like_product.all %}
+    <button type="submit">♥</button>
+    {% else %}
+    <button type="submit">♡</button>
+    {% endif %}
+</form>
+{% endif %}
+
+<p>좋아요 수: <span id="like-count">{{ product_likes_count }}</span></p>
+
+<form action="{% url 'products:delete' product.pk %}" method='POST'>
+    {% csrf_token %}
+    <input type='submit' value='삭제' onclick="return confirm('삭제 하시겠습니까?')">
 </form>
 
 <a href="{% url 'products:update' product.pk %}">[UPDATE]</a>
 
-
 {% endblock %}
+
+{% block script %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const likeForm = document.querySelector('#like-form');
+    const likeCount = document.querySelector('#like-count');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    likeForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const productId = this.dataset.productId;
+      axios({
+        method: 'post',
+        url: `/products/${productId}/likes/`,
+        headers: {
+          'X-CSRFToken': csrfToken
+        }
+      })
+        .then((response) => {
+          console.log(response);
+          const isLiked = response.data.is_liked;
+          const likeBtn = document.querySelector('#like-form > button[type=submit]');
+          if (isLiked === true) {
+            likeBtn.innerText = '♥';
+          } else {
+            likeBtn.innerText = '♡';
+          }
+          likeCount.innerText = response.data.product_likes_count;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  </script>
+{% endblock script %}
