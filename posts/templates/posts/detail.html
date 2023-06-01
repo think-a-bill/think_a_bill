@@ -11,7 +11,9 @@
   <div class="detail--box">
     {{post.title}}<br>
     {{post.category}}<br>
+    {% if post.image %}
     <img src="{{ post.image.url }}" alt="Post Image"><br>
+    {% endif %}
     {{post.content}}<br>
     <div>
         {% for tag in tags %}
