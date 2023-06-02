@@ -29,9 +29,6 @@
     </div>
   </div>   
 
-{% endblock content %}
-
-
 {% if request.user.is_authenticated %}
 <form id="post-like-form" data-post-id="{{ post.pk }}">
     {% csrf_token %}
@@ -43,11 +40,11 @@
 </form>
 {% endif %} 
 
-{% comment %} <div id="post-likes-count">
-  {{ post_likes_count }} Likes
-</div> {% endcomment %}
+<div id="post-likes-count">
+  Likes
+</div>
 <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
-{% endblock  %}
+{% endblock content %}
 
 {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -112,5 +109,54 @@
       likesCountTag.textContent = likesCountData
     })
 })
+
+// 방법 3
+{% comment %} const form = document.querySelector('#post-like-form');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const postId = form.dataset.postId;
+
+function updateLikesCount() {
+  axios({
+    method: 'get',
+    url: `/posts/${postId}/likes/`,
+    headers: { 'X-CSRFToken': csrftoken },
+  })
+    .then((response) => {
+      const likesCountTag = document.querySelector('#post-likes-count');
+      const likesCountData = response.data.post_likes_count;
+      likesCountTag.textContent = likesCountData;
+    })
+    .catch((error) => {
+      console.error('Error fetching likes count:', error);
+    });
+}
+
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  axios({
+    method: 'post',
+    url: `/posts/${postId}/likes/`,
+    headers: { 'X-CSRFToken': csrftoken },
+  })
+    .then((response) => {
+      const isLiked = response.data.is_liked;
+      const likeBtn = document.querySelector('#post-like-form > button[type=submit]');
+
+      if (isLiked === true) {
+        likeBtn.innerText = '♥';
+      } else {
+        likeBtn.innerText = '♡';
+      }
+
+      updateLikesCount(); // 좋아요 개수 업데이트
+
+    })
+    .catch((error) => {
+      console.error('Error liking post:', error);
+    });
+});
+
+// 페이지 로드 시 좋아요 개수 업데이트
+updateLikesCount(); {% endcomment %}
   </script>
 {% endblock script %}

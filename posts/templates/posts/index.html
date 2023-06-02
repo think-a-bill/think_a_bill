@@ -14,7 +14,18 @@ Main
 {% endblock style %}
 {% block content %}
   <div class="index--page">
-    
+    <div class="sidebar">
+      <h2>전체 List</h2>
+      <ul>
+        <li><a href="{% url 'posts:index' %}"><i class="bi bi-list"></i> 최신순</a></li>
+        {% comment %} <li><a href="{% url 'posts:filtering' '리뷰순' %}"><i class="bi bi-chat-dots"></i> 댓글순</a></li>
+        <li><a href="{% url 'posts:filtering' '좋아요순' %}"><i class="bi bi-chat-heart"></i> 좋아요순</a></li> {% endcomment %}
+      </ul>
+    </div>
+
+    <div class="posts">
+      <h2>금융 정보 공유</h2>
+    </div>
   </div>
 
 
