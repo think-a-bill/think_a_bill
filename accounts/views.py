@@ -14,20 +14,21 @@ from allauth.socialaccount.models import SocialAccount
 import requests
 # Create your views here.
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('main')
+    # if request.user.is_authenticated:
+    #     return redirect('main')
     
-    if request.method == 'POST':
-        form = CustomAuthenticationForm(request, request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
-            return redirect('posts:index')
-    else:
-        form = CustomAuthenticationForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'accounts/login.html', context)
+    # if request.method == 'POST':
+    #     form = CustomAuthenticationForm(request, request.POST)
+    #     if form.is_valid():
+    #         auth_login(request, form.get_user())
+    #         return redirect('posts:index')
+    # else:
+    #     form = CustomAuthenticationForm()
+    # context = {
+    #     'form': form,
+    # }
+    # return render(request, 'accounts/login.html', context)
+    pass
 
 User = get_user_model()
 
@@ -158,19 +159,3 @@ def kakao_disconnect(request):
     # 계정 삭제 후 리다이렉트할 URL
         redirect_url = 'posts:index'
     return redirect('posts:index')
-
-
-# 카카오 API를 통해 사용자 정보 가져오기
-def get_kakao_user_info(access_token):
-    headers = {"Authorization": f"Bearer {access_token}"}
-    response = requests.get("https://kapi.kakao.com/v2/user/me", headers=headers)
-    user_info = response.json()
-    return user_info
-
-def kakao_login_callback(request):
-  access_token = request.GET.get("access_token")
-  user_info = get_kakao_user_info(access_token)
-  birthday = user_info.get("kakao_account", {}).get("birthday")
-  if birthday:
-    user = User.objects.create(username=user_info["id"], birthday=birthday)
-  return HttpResponse("Success")
