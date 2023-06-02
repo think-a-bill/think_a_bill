@@ -13,12 +13,12 @@
       <br>
       <h1>회원가입 진행중 ..🐌</h1>
       <br>
-      <form action="{% url 'accounts:signup' %}" method='POST'>
+      <form action="{% url 'accounts:basic_signup' %}" method='POST'>
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Join" class="accounts--btn">
-        <a href="{% url 'accounts:login' %}" class="accounts--btn">Login</a>
       </form>
+      <a href="{% url 'accounts:login' %}" class="accounts--btn">Login</a>
     </div>
   </div>
   {% endblock content %}

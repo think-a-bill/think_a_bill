@@ -33,20 +33,21 @@ def login(request):
 User = get_user_model()
 
 def signup(request):
-    if request.user.is_authenticated:
-        return redirect('posts:index')
+    # if request.user.is_authenticated:
+    #     return redirect('posts:index')
     
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('accounts:login')
-    else:
-        form = CustomUserCreationForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'accounts/signup.html', context)
+    # if request.method == 'POST':
+    #     form = CustomUserCreationForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('accounts:login')
+    # else:
+    #     form = CustomUserCreationForm()
+    # context = {
+    #     'form': form,
+    # }
+    # return render(request, 'accounts/signup.html', context)
+    pass
 
 def basic_signup(request):
     if request.user.is_authenticated:
@@ -56,7 +57,7 @@ def basic_signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('accounts:login')
+            return redirect('accounts:basic_login')
     else:
         form = CustomUserCreationForm()
     context = {
