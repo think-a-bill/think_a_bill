@@ -30,20 +30,49 @@
   </div>   
 
 {% if request.user.is_authenticated %}
-<form id="post-like-form" data-post-id="{{ post.pk }}">
-    {% csrf_token %}
-    {% if request.user in post.like_post.all %}
-    <button type="submit">♥</button>
-    {% else %}
-    <button type="submit">♡</button>
-    {% endif %}
-</form>
+  <form id="post-like-form" data-post-id="{{ post.pk }}">
+      {% csrf_token %}
+      {% if request.user in post.like_post.all %}
+      <button type="submit">♥</button>
+      {% else %}
+      <button type="submit">♡</button>
+      {% endif %}
+  </form>
 {% endif %} 
 
 <div id="post-likes-count">
   Likes
 </div>
 <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
+
+{% for comment in comments %}
+  <p>내용: {{ comment.content }}</p>
+
+
+
+  <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
+    {% csrf_token %}
+    {% if request.user in comment.like_comment.all %}
+      <button type="submit">♥</button>
+    {% else %}
+      <button type="submit">♡</button>
+    {% endif %}
+  </form>
+  {% comment %} <form action="{% url 'posts:comments_likes' post.pk comment.pk %}" method="POST">
+    {% csrf_token %}
+    {% if request.user in comment.like_comment.all %}
+      <input type="submit" value="좋아요 취소">
+    {% else %}
+      <input type="submit" value="좋아요">
+    {% endif %}
+  </form> {% endcomment %}
+
+{% endfor %}
+<form action="{% url 'posts:comments_create' post.pk %}" method="POST">
+  {% csrf_token %}
+  {{ comment_form }}
+  <input style="width:100%;" class="btn btn-primary mt-4" type="submit" value="작성하기">
+</form>
 {% endblock content %}
 
 {% block script %}
@@ -159,4 +188,57 @@ form.addEventListener('submit', function (event) {
 // 페이지 로드 시 좋아요 개수 업데이트
 updateLikesCount(); {% endcomment %}
   </script>
+
+  <script>
+    const commentForms = document.querySelectorAll('#comment-like-form');
+    const csrftoken1 = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    commentForms.forEach(function(commentForm) {
+      commentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const commentId = this.dataset.commentId;
+        const postId = this.dataset.postId;
+        axios({
+          method: 'post',
+          url: `/posts/${postId}/comments/${commentId}/likes/`,
+          headers: {
+            'X-CSRFToken': csrftoken1
+          }
+        })
+          .then((response) => {
+            console.log(response);
+            const isLiked = response.data.is_liked;
+            const likeBtn = this.querySelector('button[type=submit]');
+            if (isLiked === true) {
+              likeBtn.value = '♥';
+              likeBtn.innerText = '♥';
+            } else {
+              likeBtn.value = '♡';
+              likeBtn.innerText = '♡';
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+    });
+</script>
+
+
+
+
+
+
+  <script>
+    function toggleReviewContent() {
+      var reviewContent = document.getElementById("reviewContent");
+      if (reviewContent.style.display === "none") {
+        reviewContent.style.display = "block";
+      } else {
+        reviewContent.style.display = "none";
+      }
+    }
+  </script>
+  
+
 {% endblock script %}

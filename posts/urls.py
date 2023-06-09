@@ -17,7 +17,7 @@ urlpatterns = [
     # comment관련 url
     path('<int:post_pk>/comments/', views.comments_create, name='comments_create'),
     path('<int:post_pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
-    
+    path('<int:post_pk>/comments/<int:comment_pk>/likes', views.comments_likes, name='comments_likes'),
 
     
     # 기타 url
