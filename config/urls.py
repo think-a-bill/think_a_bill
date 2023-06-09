@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', views.index_redirect),
     path('', views.main, name='main'),
+    path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
     path('posts/', include('posts.urls')),
     path('products/', include('products.urls')),
