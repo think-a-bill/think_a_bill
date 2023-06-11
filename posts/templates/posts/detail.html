@@ -11,39 +11,50 @@
 {% block content %}
   <div class="detail--box">
     <div class="detail--info">
-      <p class="detail--title">제목 : {{post.title}}<br></p>
-      <p class="detail--category">분류 : {{post.category}}</p><br>
-      {% if post.image %}
-      <img src="{{ post.image.url }}" alt="Post Image"><br>
-      {% endif %}
-      {{post.content}}<br>
-      <div>
-          {% for tag in tags %}
-          <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
-      {% endfor %}
+      <div class="detail--header">
+        <div class="detail--title"><b>{{post.title}}</b></div>
+        <div class="detail--category">{{post.category}}</div>
       </div>
-      {% for comment in comments %}
-      {{comment.user}}
-      {{comment.content}}
-      {% endfor %}
+      <div class="detail--content">
+        {{post.content}}
+      </div>
+      {% if post.image %}
+      <div class="detail--image--box">
+        <img src="{{ post.image.url }}" alt="Post Image">
+      </div>
+      {% endif %}
+      <div class="detail--tags">
+        {% for tag in tags %}
+        <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
+        {% endfor %}
+      </div>
+      <div class="detail--comments">
+        {% for comment in comments %}
+        <div class="comment">
+          {{comment.user}}
+          {{comment.content}}
+        </div>
+        {% endfor %}
+      </div>
     </div>
-  </div>   
-
-{% if request.user.is_authenticated %}
-<form id="post-like-form" data-post-id="{{ post.pk }}">
-    {% csrf_token %}
-    {% if request.user in post.like_post.all %}
-    <button type="submit">♥</button>
-    {% else %}
-    <button type="submit">♡</button>
-    {% endif %}
-</form>
-{% endif %} 
-
-<div id="post-likes-count">
-  Likes
-</div>
-<span id="post-likes-count">{{ post.like_posts.all|length }}</span>
+  
+    {% if request.user.is_authenticated %}
+    <form id="post-like-form" data-post-id="{{ post.pk }}">
+        {% csrf_token %}
+        {% if request.user in post.like_post.all %}
+        <button type="submit">♥</button>
+        {% else %}
+        <button type="submit">♡</button>
+        {% endif %}
+    </form>
+    {% endif %} 
+  
+    <div id="post-likes-count">
+      Likes
+    </div>
+    <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
+  </div>
+  
 {% endblock content %}
 
 {% block script %}

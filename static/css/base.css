@@ -33,6 +33,10 @@
   font-style: normal;
 }
 
+ul {
+  list-style-type: none;
+}
+
 /* Base */
 
 * {
@@ -270,8 +274,8 @@ ul li {
 
 .search input {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50;
+  left: 50;
   width: 90%;
   height: 100%;
   border: none;
@@ -453,6 +457,108 @@ footer a {
 }
 
 .posts--commentBtn {
+  border: none;
+  background-color: #3e5c39c2;
+  color: white;
+  font-size: 20px;
+  width: 400px;
+  border-radius: 10px;
+  margin: 5px 0;
+  display: block;
+  text-align: center;
+}
+
+.post-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-left: 10px;
+}
+
+.post-item {
+  display: inline-block;
+  width: 500px;
+  background-color: #f5fff5fc;
+  padding: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-meta {
+  display: flex;
+  gap: 10px;
+}
+.post-category,
+.post-date {
+  font-size: 14px;
+  color: #888888;
+}
+
+.post-content {
+  line-height: 1.5;
+  max-height: 4.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-content::after {
+  content: "...";
+}
+
+.post-content:hover {
+  max-height: none;
+  overflow: visible;
+  white-space: normal;
+}
+
+.post-content:hover::after {
+  display: none;
+}
+
+/* products */
+
+.products--box {
+  margin: 15px 50px;
+}
+
+.products--create{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.products--create h1{
+  color: #3e5c39c2;
+}
+
+.products--btn {
+  border: none;
+  background-color: #3e5c39c2;
+  color: white;
+  font-size: 20px;
+  width: 600px;
+  border-radius: 10px;
+  margin: 5px 0;
+  display: block;
+  text-align: center;
+}
+
+.products--commentBtn {
   border: none;
   background-color: #3e5c39c2;
   color: white;

@@ -7,8 +7,31 @@
 
 {% block content %}
 <div class="main--content">
-
+  <div class="content--box">
+    <div class="top--box">최근 게시글</div>
+    <ul>
+      {% for post in recent_posts %}
+      <li class="post--item">
+        <a href="{% url 'posts:detail' post.pk %}" class="main--card">
+          <span class="post--title">{{ post.title }}</span>
+          <span class="post--category">{{ post.category }}</span>
+          <span class="post--date">{{ post.created_at|date:"Y년 m월 d일" }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
   
+  <div class="content--box">
+    <div class="top--box">상품 정보</div>
+    <div class="product--info">
+      <ul>
+        {% for product in recent_products %}
+          <a href="{% url 'products:detail' product.pk %} " class="main--card">{{ product.title }}</a><br>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}

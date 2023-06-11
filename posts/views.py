@@ -12,7 +12,11 @@ def index_redirect(request):
     return render(request, 'posts/index.html')
 
 def index(request):
-    return render(request, 'posts/index.html')
+    posts = Post.objects.all().order_by('-created_at')  # 전체 게시물 가져오기
+    context = {
+        'posts': posts,
+    }
+    return render(request, 'posts/index.html', context)
 
 # def create(request):
 #     if request.method == 'POST':
