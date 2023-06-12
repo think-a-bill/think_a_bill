@@ -226,8 +226,19 @@ def question(request,pk):
         user.score += 1
         user.save()
     if num > 4:
-        return redirect('result',pk)
+        return redirect('set_grade',pk)
   
   quiz = get_object_or_404(Question, id=num)
 
   return render(request, "quiz.html", {'quiz':quiz})
+
+def set_grade(user):
+    if user.score >= 5:
+        user.grade = 'A'
+    elif user.score >= 4:
+        user.grade = 'B'
+    elif user.score >= 3:
+        user.grade = 'C'
+    else:
+        user.grade = 'D'
+    user.save()
