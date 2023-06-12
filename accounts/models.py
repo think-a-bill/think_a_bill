@@ -26,7 +26,7 @@ class Question(models.Model):
 
 class PnuUser(models.Model):
     name = models.CharField(max_length=20, default="익명")
-    answer = models.models.CharField(default="", max_length=10,null=True,blank=True)
+    answer = models.CharField(default="", max_length=10,null=True,blank=True)
     score = models.IntegerField(default=0, null=True, blank=True)
 
     def __str__(self):
