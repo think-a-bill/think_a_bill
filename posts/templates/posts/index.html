@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Main
+Post Main
 {% endblock title %}
 
 {% block style %}
@@ -23,8 +23,19 @@ Main
       </ul>
     </div>
 
-    <div class="posts">
-      <h2>금융 정보 공유</h2>
+    <div class="post-list">
+      {% for post in posts %}
+        <div class="post-item">
+          <div class="post-header">
+            <h3 class="post-title">{{ post.title }}</h3>
+            <div class="post-meta">
+              <span class="post-category">{{ post.category }}</span>
+              <span class="post-date">{{ post.created_at|date:"Y년 m월 d일" }}</span>
+            </div>
+          </div>
+          <div class="post-content">{{ post.content }}</div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 
