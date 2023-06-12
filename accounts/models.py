@@ -9,3 +9,8 @@ class User(AbstractUser):
     image = models.ImageField(blank=True, null=True, upload_to='profile/')
     birthday = models.DateField(blank=True, null=True,)
     follow = models.ManyToManyField('self',symmetrical=False,related_name='followers')
+
+    def save(self, *args, **kwargs):
+        if not self.birthday:
+            self.birthday = None
+        super().save(*args, **kwargs)
