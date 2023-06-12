@@ -11,7 +11,9 @@ from django.views.generic import DetailView
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm, CustomUserChangeForm , CustomAuthenticationForm
 from allauth.socialaccount.models import SocialAccount
-import requests
+import requests 
+# from .models import Question, User
+
 # Create your views here.
 def login(request):
     # if request.user.is_authenticated:
@@ -160,3 +162,44 @@ def kakao_disconnect(request):
     # 계정 삭제 후 리다이렉트할 URL
         redirect_url = 'posts:index'
     return redirect('posts:index')
+
+# def calculate_score(user):
+#     user_score = 0  # 사용자의 점수를 초기화
+
+#     # 사용자가 선택한 답안과 정답을 비교하여 점수 계산
+#     for question in Question.objects.all():
+#         user_answer = request.POST.get(f'question_{question.id}')  # 사용자가 선택한 답안
+#         correct_answer = question.correct_answer  # 해당 문제의 정답
+
+#         if user_answer == correct_answer:
+#             user_score += question.score
+
+#     user.score = user_score  # 계산된 점수를 사용자에 저장
+#     user.save()
+
+# def quiz(request):
+#     # 문제 데이터 가져오기
+#     questions = Question.objects.all()
+
+#     if request.method == 'POST':
+#         # 유저가 퀴즈를 제출한 경우
+#         user = User.objects.get(name=request.user.username)
+#         # 점수 계산
+#         calculate_score(user)
+#         # 등급 설정
+#         set_grade(user)
+#     context = {
+#        'questions': questions,
+#     }
+#     return render(request, 'quiz.html', context)
+
+# def set_grade(user):
+#     if user.score >= 5:
+#         user.grade = 'A'
+#     elif user.score >= 4:
+#         user.grade = 'B'
+#     elif user.score >= 3:
+#         user.grade = 'C'
+#     else:
+#         user.grade = 'D'
+#     user.save()

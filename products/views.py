@@ -80,3 +80,26 @@ def product_list(request):
         'products': products,
     }
     return render(request, 'products/product_list.html', context)
+
+
+import requests
+from django.shortcuts import render
+
+def get_product_data(request):
+    url = "http://apis.data.go.kr/B190017/service/GetInsuredProductService202008"
+    auth_key = "vR0vdFg3QaXA8SZ/CeuPjEXQqhb2UWgCL0pQLAMP3Wyuwf/iU0pUSZy+1Vz7qZqdLVS4Kb0OGSYJyQnq812z7w=="
+
+    params = {
+        "인증키": auth_key,
+    }
+
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        context = {
+            'data': data
+        }
+        return render(request, 'products/product_data.html', context)
+    else:
+        return render(request, 'products/error.html')

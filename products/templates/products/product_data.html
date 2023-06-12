@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+  상품 데이터 가져오기
+{% endblock title %}
+
+{% block content %}
+    <h1>Product Information</h1>
+    {% if data %}
+        <ul>
+        {% for item in data %}
+            <li>
+                <h2>{{ item.title }}</h2>
+                <p>Category: {{ item.category }}</p>
+                <p>Created at: {{ item.created_at }}</p>
+                <p>{{ item.content }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+{% endblock content %}
+
+
+
+
+
+
+

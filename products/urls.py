@@ -9,4 +9,6 @@ urlpatterns = [
     path('<int:product_pk>/update/', views.update, name='update'),
     path('<int:product_pk>/likes/', views.likes, name='likes'),
     path('list/', views.product_list, name='product_list'),
+    path('product-data/', views.get_product_data, name='get_product_data'),
+
 ]

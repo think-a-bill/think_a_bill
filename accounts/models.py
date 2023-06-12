@@ -9,8 +9,11 @@ class User(AbstractUser):
     image = models.ImageField(blank=True, null=True, upload_to='profile/')
     birthday = models.DateField(blank=True, null=True,)
     follow = models.ManyToManyField('self',symmetrical=False,related_name='followers')
+    score = models.IntegerField(default=0)
+    grade = models.CharField(max_length=50, default='D')
 
-    def save(self, *args, **kwargs):
-        if not self.birthday:
-            self.birthday = None
-        super().save(*args, **kwargs)
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    score = models.IntegerField(default=None)
+
+
