@@ -115,7 +115,13 @@ if 'CHANNEL_LAYER_REDIS_URL' in env:
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
             'CONFIG': {
-                'hosts': channel_layer_redis['HOST'],
+                'hosts' : [
+                    {
+                    'host' : channel_layer_redis['HOST'],
+                    'port' : channel_layer_redis['PORT'],
+                    'password' : channel_layer_redis['PASSWORD'],
+                    },
+                ],
             },
         },
     }

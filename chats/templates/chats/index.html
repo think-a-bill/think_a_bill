@@ -1,10 +1,10 @@
-{% extends 'chats/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
     <h1>채팅방 목록</h1>
     <ul>
         <li>
-            <a href="">테스트 채팅방 진입</a>
+
             <a href="{% url 'chats:room_chat' 'test' %}">테스트 채팅방 진입</a>
         </li>
     </ul>
