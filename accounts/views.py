@@ -12,7 +12,7 @@ from django.http import JsonResponse
 from .forms import CustomUserCreationForm, CustomUserChangeForm , CustomAuthenticationForm
 from allauth.socialaccount.models import SocialAccount
 import requests 
-# from .models import Question, User
+from .models import Question, User , PnuUser , Answer
 
 # Create your views here.
 def login(request):
@@ -155,13 +155,13 @@ def toggle_follow(request):
 
   return JsonResponse({'error': 'Invalid request'})
 
-def kakao_disconnect(request):
-    if request.user.is_authenticated:
-        # 사용자의 카카오 소셜 계정 연결 끊기
-        SocialAccount.objects.filter(user=request.user, provider='kakao').delete() 
-    # 계정 삭제 후 리다이렉트할 URL
-        redirect_url = 'posts:index'
-    return redirect('posts:index')
+# def kakao_disconnect(request):
+#     if request.user.is_authenticated:
+#         # 사용자의 카카오 소셜 계정 연결 끊기
+#         SocialAccount.objects.filter(user=request.user, provider='kakao').delete() 
+#     # 계정 삭제 후 리다이렉트할 URL
+#         redirect_url = 'posts:index'
+#     return redirect('posts:index')
 
 # def calculate_score(user):
 #     user_score = 0  # 사용자의 점수를 초기화
@@ -203,3 +203,31 @@ def kakao_disconnect(request):
 #     else:
 #         user.grade = 'D'
 #     user.save()
+
+def quiz(requset):
+   if requset.GET:
+      user = PnuUser()
+      user.name = requset.GET['username']
+      if requset.GET['username'] == "":
+         user.name = '익명'
+      user.save()
+      return redirect('quiz',user.pk)
+   return render(requset, "accounts/quiz.html")
+
+def question(request,pk):
+  user = get_object_or_404(PnuUser, pk=pk)
+  aans = get_object_or_404(Answer)
+
+  num = 1
+  if request.POST:
+    num = int(request.POST['quiz_id']) + 1
+    user.answer = user.answer + request.POST['answer']
+    if request.POST['answer'] == aans.ans[num-2]:
+        user.score += 1
+        user.save()
+    if num > 4:
+        return redirect('result',pk)
+  
+  quiz = get_object_or_404(Question, id=num)
+
+  return render(request, "quiz.html", {'quiz':quiz})
