@@ -25,7 +25,7 @@ Post Main
 
     <div class="post-list">
       {% for post in posts %}
-        <div class="post-item">
+        <a href="{% url 'posts:detail' post.pk %}" class="post-item">
           <div class="post-header">
             <h3 class="post-title">{{ post.title }}</h3>
             <div class="post-meta">
@@ -34,12 +34,10 @@ Post Main
             </div>
           </div>
           <div class="post-content">{{ post.content }}</div>
-        </div>
+        </a>
       {% endfor %}
     </div>
   </div>
-
-
 
 
 {% endblock  %}

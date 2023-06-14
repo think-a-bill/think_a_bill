@@ -12,6 +12,10 @@
   font-style: normal;
 }
 
+div {
+  text-decoration: none;
+}
+
 /* detail */
 
 .detail--box {
@@ -77,6 +81,8 @@
   grid-template-columns: 1fr;
   gap: 10px;
 }
+
+.comment--box
 
 .comment {
   color: #364e2f;

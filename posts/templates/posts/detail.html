@@ -12,11 +12,11 @@
   <div class="detail--box">
     <div class="detail--info">
       <div class="detail--header">
-        <div class="detail--title"><b>{{post.title}}</b></div>
-        <div class="detail--category">{{post.category}}</div>
+        <div class="detail--title"><b>{{ post.title }}</b></div>
+        <div class="detail--category">{{ post.category }}</div>
       </div>
       <div class="detail--content">
-        {{post.content}}
+        {{ post.content }}
       </div>
       {% if post.image %}
       <div class="detail--image--box">
@@ -26,14 +26,6 @@
       <div class="detail--tags">
         {% for tag in tags %}
         <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
-        {% endfor %}
-      </div>
-      <div class="detail--comments">
-        {% for comment in comments %}
-        <div class="comment">
-          {{comment.user}}
-          {{comment.content}}
-        </div>
         {% endfor %}
       </div>
     </div>
@@ -53,19 +45,33 @@
       Likes
     </div>
     <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
+  
+    <div class="detail--comments">
+      {% for comment in comments %}
+      <div class="comment">
+        {{ comment.user }} :
+        {{ comment.content }}
+      </div>
+      {% endfor %}
+
+      <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
+        {% csrf_token %}
+        {% if request.user in comment.like_comment.all %}
+          <button type="submit">♥</button>
+        {% else %}
+          <button type="submit">♡</button>
+        {% endif %}
+      </form>
+      <form action="{% url 'posts:comments_create' post.pk %}" method="POST">
+        {% csrf_token %}
+        <div style="display: flex;">
+          {{ comment_form }}
+          <input style="width: 50px; margin-left: 10px;" class="btn btn-outline-success mt-4" type="submit" value="작성">
+        </div>
+      </form>
+    </div>
   </div>
-
-{% for comment in comments %}
-  <p>내용: {{ comment.content }}</p>
-
-  <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
-    {% csrf_token %}
-    {% if request.user in comment.like_comment.all %}
-      <button type="submit">♥</button>
-    {% else %}
-      <button type="submit">♡</button>
-    {% endif %}
-  </form>
+{% endblock content %}
   {% comment %} <form action="{% url 'posts:comments_likes' post.pk comment.pk %}" method="POST">
     {% csrf_token %}
     {% if request.user in comment.like_comment.all %}
@@ -75,13 +81,7 @@
     {% endif %}
   </form> {% endcomment %}
 
-{% endfor %}
-<form action="{% url 'posts:comments_create' post.pk %}" method="POST">
-  {% csrf_token %}
-  {{ comment_form }}
-  <input style="width:100%;" class="btn btn-primary mt-4" type="submit" value="작성하기">
-</form>
-{% endblock content %}
+
 
 {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
