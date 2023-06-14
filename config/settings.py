@@ -138,7 +138,13 @@ if 'CHANNEL_LAYER_REDIS_URL' in env:
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
             'CONFIG': {
-                'hosts': channel_layer_redis['HOST'],
+                'hosts' : [
+                    {
+                    'host' : channel_layer_redis['HOST'],
+                    'port' : channel_layer_redis['PORT'],
+                    'password' : channel_layer_redis['PASSWORD'],
+                    },
+                ],
             },
         },
     }
@@ -194,8 +200,8 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = reverse_lazy('posts:index')
+LOGIN_REDIRECT_URL = reverse_lazy('main')
 
-LOGOUT_REDIRECT_URL = reverse_lazy('posts:index')
+LOGOUT_REDIRECT_URL = reverse_lazy('main')
 
 PASSWORD_CHANGE_REDIRECT_URL = '/'

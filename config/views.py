@@ -26,4 +26,11 @@ def main(request):
     # 'post_images': post_images,
     # 'product_images': product_images,
     # }
-    return render(request, 'main.html')
+    # return render(request, 'main.html')
+    recent_posts = Post.objects.order_by('-created_at')[:5]  # 최근 5개의 게시글 가져오기
+    recent_products = Product.objects.order_by('-created_at')[:5]  # 최근 5개의 게시글 가져오기
+    context = {
+        'recent_posts': recent_posts,
+        'recent_products': recent_products
+        }
+    return render(request, 'main.html', context)
