@@ -177,9 +177,10 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['question_text', 'option1', 'option2', 'option3', 'option4', 'image']
+        fields = ['question', 'option1', 'option2', 'option3', 'option4', 'image']
 
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         fields = ['ans',]
+
