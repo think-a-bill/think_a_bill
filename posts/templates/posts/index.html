@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Main
+Post Main
 {% endblock title %}
 
 {% block style %}
@@ -14,7 +14,29 @@ Main
 {% endblock style %}
 {% block content %}
   <div class="index--page">
-    
+    <div class="sidebar">
+      <h2>전체 List</h2>
+      <ul>
+        <li><a href="{% url 'posts:index' %}"><i class="bi bi-list"></i> 최신순</a></li>
+        {% comment %} <li><a href="{% url 'posts:filtering' '리뷰순' %}"><i class="bi bi-chat-dots"></i> 댓글순</a></li>
+        <li><a href="{% url 'posts:filtering' '좋아요순' %}"><i class="bi bi-chat-heart"></i> 좋아요순</a></li> {% endcomment %}
+      </ul>
+    </div>
+
+    <div class="post-list">
+      {% for post in posts %}
+        <div class="post-item">
+          <div class="post-header">
+            <h3 class="post-title">{{ post.title }}</h3>
+            <div class="post-meta">
+              <span class="post-category">{{ post.category }}</span>
+              <span class="post-date">{{ post.created_at|date:"Y년 m월 d일" }}</span>
+            </div>
+          </div>
+          <div class="post-content">{{ post.content }}</div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 
 

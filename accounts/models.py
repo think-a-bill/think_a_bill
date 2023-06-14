@@ -7,5 +7,5 @@ from django.db import models
 class User(AbstractUser):
     # nickname = models.CharField(max_length=20,unique=True)
     image = models.ImageField(blank=True, null=True, upload_to='profile/')
-    #birthday = models.DateField(blank=False,)
+    birthday = models.DateField(blank=True, null=True,)
     follow = models.ManyToManyField('self',symmetrical=False,related_name='followers')

@@ -9,28 +9,47 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.http import JsonResponse
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-
+from .forms import CustomUserCreationForm, CustomUserChangeForm , CustomAuthenticationForm
+from allauth.socialaccount.models import SocialAccount
+import requests
 # Create your views here.
-# def login(request):
-#     if request.user.is_authenticated:
-#         return redirect('main')
+def login(request):
+    # if request.user.is_authenticated:
+    #     return redirect('main')
     
-#     if request.method == 'POST':
-#         form = CustomAuthenticationForm(request, request.POST)
-#         if form.is_valid():
-#             auth_login(request, form.get_user())
-#             return redirect('posts:index')
-#     else:
-#         form = CustomAuthenticationForm()
-#     context = {
-#         'form': form,
-#     }
-#     return render(request, 'accounts/login.html', context)
+    # if request.method == 'POST':
+    #     form = CustomAuthenticationForm(request, request.POST)
+    #     if form.is_valid():
+    #         auth_login(request, form.get_user())
+    #         return redirect('posts:index')
+    # else:
+    #     form = CustomAuthenticationForm()
+    # context = {
+    #     'form': form,
+    # }
+    # return render(request, 'accounts/login.html', context)
+    pass
 
 User = get_user_model()
 
 def signup(request):
+    # if request.user.is_authenticated:
+    #     return redirect('posts:index')
+    
+    # if request.method == 'POST':
+    #     form = CustomUserCreationForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('accounts:login')
+    # else:
+    #     form = CustomUserCreationForm()
+    # context = {
+    #     'form': form,
+    # }
+    # return render(request, 'accounts/signup.html', context)
+    pass
+
+def basic_signup(request):
     if request.user.is_authenticated:
         return redirect('posts:index')
     
@@ -38,7 +57,7 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('accounts:login')
+            return redirect('accounts:basic_login')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -133,3 +152,11 @@ def toggle_follow(request):
       return JsonResponse({'is_following': is_following})
 
   return JsonResponse({'error': 'Invalid request'})
+
+def kakao_disconnect(request):
+    if request.user.is_authenticated:
+        # 사용자의 카카오 소셜 계정 연결 끊기
+        SocialAccount.objects.filter(user=request.user, provider='kakao').delete() 
+    # 계정 삭제 후 리다이렉트할 URL
+        redirect_url = 'posts:index'
+    return redirect('posts:index')

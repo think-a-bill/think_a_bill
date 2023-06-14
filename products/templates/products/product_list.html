@@ -1,10 +1,37 @@
 {% extends 'base.html' %}
 {% block title %}
-  상품 리스트
+  Product List
 {% endblock title %}
 
 {% block content %}
- <h1>Product List</h1>
+
+<div class="index--page">
+    <div class="sidebar">
+      <h2>전체 List</h2>
+      <ul style="none">
+        <li><a href="{% url 'products:product_list' %}"><i class="bi bi-list"></i> 최신순</a></li>
+        {% comment %} <li><a href="{% url 'posts:filtering' '리뷰순' %}"><i class="bi bi-chat-dots"></i> 댓글순</a></li>
+        <li><a href="{% url 'posts:filtering' '좋아요순' %}"><i class="bi bi-chat-heart"></i> 좋아요순</a></li> {% endcomment %}
+      </ul>
+    </div>
+
+    <div class="posts">
+      <ul>
+        {% for product in products %}
+          <li class="product--item">
+            <a href="{% url 'products:detail' product.pk %}" class="main--card">
+              <span class="product--title">{{ product.title }}</span>
+              <span class="product--category">{{ product.category }}</span>
+              <span class="product--date">{{ product.created_at|date:"Y년 m월 d일" }}</span>
+            </a>
+          </li>
+          {% empty %}
+            <li>No products available.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+ {% comment %} <h1>Product List</h1>
     <ul>
     {% for product in products %}
         <li>{{ product.title }}</li>
@@ -16,5 +43,5 @@
     {% empty %}
         <li>No products available.</li>
     {% endfor %}
-    </ul>
+    </ul> {% endcomment %}
 {% endblock content %}

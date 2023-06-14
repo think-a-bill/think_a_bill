@@ -62,7 +62,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #카카오 로그인
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
 ]
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        'APP': {
+            'client_id': '2b32ed18d6b9e74e75b2070ed420a053',
+            'secret': 'bpxhxbfjCDmyaNIddzJBNvvSqzvWKDSJ',
+            'key': ''
+        }
+    }
+}
 
 
 MIDDLEWARE = [
@@ -148,9 +171,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -177,8 +200,8 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = reverse_lazy('posts:index')
+LOGIN_REDIRECT_URL = reverse_lazy('main')
 
-LOGOUT_REDIRECT_URL = reverse_lazy('posts:index')
+LOGOUT_REDIRECT_URL = reverse_lazy('main')
 
 PASSWORD_CHANGE_REDIRECT_URL = '/'

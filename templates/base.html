@@ -28,7 +28,12 @@
     </div>
     <div class="nav--right">
       {% if request.user.is_authenticated %}
-        <a href="{% url 'posts:create' %}"><i class="fa-solid fa-pencil fa-lg" style="color: #97ad94;"></i></a>
+        {% if request.resolver_match.view_name == 'posts:index' %}
+          <a href="{% url 'posts:create' %}"><i class="fa-solid fa-pencil fa-lg" style="color: #97ad94;"></i></a>
+        {% endif %}
+        {% if request.resolver_match.view_name == 'products:product_list' %}
+          <a href="{% url 'products:create' %}"><i class="fa-solid fa-pencil fa-lg" style="color: #97ad94;"></i></a>
+        {% endif %}
       {% endif %}
       {% block search-bar %}
       <div class="nav--search">
@@ -76,8 +81,8 @@
             <i class="fa-solid fa-user fa-xl" style="color: #1f4726"></i>
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Login</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:signup' %}">Join</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:basic_login' %}">Login</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:basic_signup' %}">Join</a></li>
           </ul>
         </div>
         {% endif %}

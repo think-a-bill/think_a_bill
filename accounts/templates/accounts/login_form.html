@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Login{% endblock title %}
 
 {% block style %}
@@ -20,6 +20,9 @@
         <input type="submit" value='로그인' class="accounts--btn">
         <input type="submit" value="Back" class="accounts--btn" onclick=window.history.back()>
       </form>
+      <a href="{% url 'accounts:login' %}">
+        <img class="accounts--btn" src="{% static 'image/kakao_login_large_wide.png' %}" alt="">
+      </a>
     </div>
   </div>
   <hr>

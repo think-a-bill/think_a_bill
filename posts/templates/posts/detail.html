@@ -11,41 +11,78 @@
 {% block content %}
   <div class="detail--box">
     <div class="detail--info">
-      <p class="detail--title">제목 : {{post.title}}<br></p>
-      <p class="detail--category">분류 : {{post.category}}</p><br>
-      {% if post.image %}
-      <img src="{{ post.image.url }}" alt="Post Image"><br>
-      {% endif %}
-      {{post.content}}<br>
-      <div>
-          {% for tag in tags %}
-          <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
-      {% endfor %}
+      <div class="detail--header">
+        <div class="detail--title"><b>{{post.title}}</b></div>
+        <div class="detail--category">{{post.category}}</div>
       </div>
-      {% for comment in comments %}
-      {{comment.user}}
-      {{comment.content}}
-      {% endfor %}
+      <div class="detail--content">
+        {{post.content}}
+      </div>
+      {% if post.image %}
+      <div class="detail--image--box">
+        <img src="{{ post.image.url }}" alt="Post Image">
+      </div>
+      {% endif %}
+      <div class="detail--tags">
+        {% for tag in tags %}
+        <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
+        {% endfor %}
+      </div>
+      <div class="detail--comments">
+        {% for comment in comments %}
+        <div class="comment">
+          {{comment.user}}
+          {{comment.content}}
+        </div>
+        {% endfor %}
+      </div>
     </div>
+
+    {% if request.user.is_authenticated %}
+    <form id="post-like-form" data-post-id="{{ post.pk }}">
+        {% csrf_token %}
+        {% if request.user in post.like_post.all %}
+        <button type="submit">♥</button>
+        {% else %}
+        <button type="submit">♡</button>
+        {% endif %}
+    </form>
+    {% endif %} 
+  
+    <div id="post-likes-count">
+      Likes
+    </div>
+    <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
+
   </div>
 
+{% for comment in comments %}
+  <p>내용: {{ comment.content }}</p>
 
-{% if request.user.is_authenticated %}
-<form id="post-like-form" data-post-id="{{ post.pk }}">
+  <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
     {% csrf_token %}
-    {% if request.user in post.like_post.all %}
-    <button type="submit">♥</button>
+    {% if request.user in comment.like_comment.all %}
+      <button type="submit">♥</button>
     {% else %}
-    <button type="submit">♡</button>
+      <button type="submit">♡</button>
     {% endif %}
-</form>
-{% endif %} 
+  </form>
+  {% comment %} <form action="{% url 'posts:comments_likes' post.pk comment.pk %}" method="POST">
+    {% csrf_token %}
+    {% if request.user in comment.like_comment.all %}
+      <input type="submit" value="좋아요 취소">
+    {% else %}
+      <input type="submit" value="좋아요">
+    {% endif %}
+  </form> {% endcomment %}
 
-{% comment %} <div id="post-likes-count">
-  {{ post_likes_count }} Likes
-</div> {% endcomment %}
-<span id="post-likes-count">{{ post.like_posts.all|length }}</span>
-{% endblock  %}
+{% endfor %}
+<form action="{% url 'posts:comments_create' post.pk %}" method="POST">
+  {% csrf_token %}
+  {{ comment_form }}
+  <input style="width:100%;" class="btn btn-primary mt-4" type="submit" value="작성하기">
+</form>
+{% endblock content %}
 
 {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -110,5 +147,107 @@
       likesCountTag.textContent = likesCountData
     })
 })
+
+// 방법 3
+{% comment %} const form = document.querySelector('#post-like-form');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const postId = form.dataset.postId;
+
+function updateLikesCount() {
+  axios({
+    method: 'get',
+    url: `/posts/${postId}/likes/`,
+    headers: { 'X-CSRFToken': csrftoken },
+  })
+    .then((response) => {
+      const likesCountTag = document.querySelector('#post-likes-count');
+      const likesCountData = response.data.post_likes_count;
+      likesCountTag.textContent = likesCountData;
+    })
+    .catch((error) => {
+      console.error('Error fetching likes count:', error);
+    });
+}
+
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  axios({
+    method: 'post',
+    url: `/posts/${postId}/likes/`,
+    headers: { 'X-CSRFToken': csrftoken },
+  })
+    .then((response) => {
+      const isLiked = response.data.is_liked;
+      const likeBtn = document.querySelector('#post-like-form > button[type=submit]');
+
+      if (isLiked === true) {
+        likeBtn.innerText = '♥';
+      } else {
+        likeBtn.innerText = '♡';
+      }
+
+      updateLikesCount(); // 좋아요 개수 업데이트
+
+    })
+    .catch((error) => {
+      console.error('Error liking post:', error);
+    });
+});
+
+// 페이지 로드 시 좋아요 개수 업데이트
+updateLikesCount(); {% endcomment %}
   </script>
+
+  <script>
+    const commentForms = document.querySelectorAll('#comment-like-form');
+    const csrftoken1 = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    commentForms.forEach(function(commentForm) {
+      commentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const commentId = this.dataset.commentId;
+        const postId = this.dataset.postId;
+        axios({
+          method: 'post',
+          url: `/posts/${postId}/comments/${commentId}/likes/`,
+          headers: {
+            'X-CSRFToken': csrftoken1
+          }
+        })
+          .then((response) => {
+            console.log(response);
+            const isLiked = response.data.is_liked;
+            const likeBtn = this.querySelector('button[type=submit]');
+            if (isLiked === true) {
+              likeBtn.value = '♥';
+              likeBtn.innerText = '♥';
+            } else {
+              likeBtn.value = '♡';
+              likeBtn.innerText = '♡';
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+    });
+</script>
+
+
+
+
+
+
+  <script>
+    function toggleReviewContent() {
+      var reviewContent = document.getElementById("reviewContent");
+      if (reviewContent.style.display === "none") {
+        reviewContent.style.display = "block";
+      } else {
+        reviewContent.style.display = "none";
+      }
+    }
+  </script>
+  
+
 {% endblock script %}

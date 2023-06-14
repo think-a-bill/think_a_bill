@@ -12,7 +12,11 @@ def index_redirect(request):
     return render(request, 'posts/index.html')
 
 def index(request):
-    return render(request, 'posts/index.html')
+    posts = Post.objects.all().order_by('-created_at')  # 전체 게시물 가져오기
+    context = {
+        'posts': posts,
+    }
+    return render(request, 'posts/index.html', context)
 
 # def create(request):
 #     if request.method == 'POST':
@@ -107,7 +111,7 @@ def likes(request, post_pk):
     }
     return JsonResponse(context)
 
-def comments_create(request, post_pk, comment_pk):
+def comments_create(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     comment_form = CommentForm(request.POST)
     if comment_form.is_valid():
@@ -130,16 +134,16 @@ def comments_delete(request, post_pk, comment_pk):
 
 def comments_likes(request, post_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
-    if request.user in comment.like_users.all():
-        comment.like_user.remove(request.user)
-        comment_is_liked = False
+    if request.user in comment.like_comment.all():
+        comment.like_comment.remove(request.user)
+        is_liked = False
     else:
-        comment.like_users.add(request.user)
-        comment_is_liked = True
+        comment.like_comment.add(request.user)
+        is_liked = True
     context = {
-        'comment_is_liked': comment_is_liked,
-        'post_comment_likes_count': comment.like_users.count(), #좋아요 수 표시
+        'is_liked': is_liked,
     }
+    return JsonResponse(context)
 
 def comments_update(request, post_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)

@@ -9,15 +9,6 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-    tags = forms.CharField(
-    label='태그',
-    widget=TagWidget(
-        attrs={
-            'class': 'form-control',
-            'placeholder': '태그는 콤마(,)로 구분하여 작성해주세요' 
-            }
-        )
-    )
     class Meta:
         model = Comment
         fields = ('content',)

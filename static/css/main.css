@@ -1,0 +1,203 @@
+@font-face {
+  font-family: 'PyeongChangPeace-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+  @font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'SUITE-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'omyu_pretty';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cafe24Ssurround';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* main */
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.main--content {
+  padding: 10px;
+  margin: 0 50px;
+  display: grid;
+  gap: 50px;
+  align-content: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1230px) {
+  .main--content {
+    grid-template-columns: 100%;
+    grid-auto-rows: 1fr;
+    row-gap: 20px;
+  }
+}
+
+@media screen and (min-width: 1230px) {
+  .main--content {
+    grid-template-columns: 50% 50%;
+  }
+}
+
+.list--box {
+  width: 100%;
+  background-color: #7ead6c62;
+  text-align: end;
+}
+
+.list--box a {
+  text-decoration: none;
+  color: #29432b;
+}
+
+.content--box {
+  width: 600px;
+  height: 600px;
+  position: relative;
+  margin: auto;
+}
+
+.top--box {
+  position: sticky;
+  top: 0;
+  left: 20px;
+  font-size: 30px;
+  color: #29432b;
+  z-index: 10;
+  background-color: rgba(191, 227, 193, 0.3);
+  padding: 2px;
+}
+
+.main--card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+/* post--box */
+.post--item {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post--title {
+  flex: 1;
+  font-weight: bold;
+  margin-right: 10px;
+  grid-column: 1;
+}
+
+.post--category {
+  grid-column: 3;
+}
+
+.post--date {
+  grid-column: 4;
+  margin-right: 0px;
+}
+
+
+/* product--box */
+
+.product--info {
+  height: 100%;
+  padding: 20px;
+}
+
+.main--content ul {
+  margin-top: 40px; /* 조정 가능한 값 */
+}
+
+.main--img {
+  width: 600px;
+  height: 600px;
+}
+
+
+.main--carousel {
+  display: flex;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.2s;
+}
+
+.card--item {
+  width: 600px;
+  height: 600px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.main--category {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow-x: hidden;
+  width: 600px;
+}
+
+.main--info--box {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 550px;
+  z-index: 999;
+  color: white;
+  font-size: 14px;
+}
+.main--info--box p{
+  margin-bottom: 2px;
+  font-family: 'SUITE-Regular';
+}
+
+.card--item:hover::after {
+  display: none;
+}
+  
+.card--item:hover .main--info--box {
+  color: rgb(210, 210, 210);
+}
+
+.main--title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  white-space: nowrap;
+}
+
+.main--heart {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+}
