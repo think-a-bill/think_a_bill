@@ -37,6 +37,10 @@ ul {
   list-style-type: none;
 }
 
+div {
+  text-decoration: none;
+}
+
 /* Base */
 
 * {
@@ -368,6 +372,10 @@ footer a {
 
 /* Index */
 
+* {
+  text-decoration: none;
+}
+
 .index--page {
   display: grid;
   grid-template-columns: repeat(20, 1fr);
@@ -429,6 +437,9 @@ footer a {
 }
 
 /* posts */
+a {
+  text-decoration: none;
+}
 
 .posts--box {
   margin: 15px 50px;
@@ -482,6 +493,8 @@ footer a {
   padding: 20px;
   margin-right: 20px;
   margin-bottom: 20px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .post-header {
@@ -489,6 +502,8 @@ footer a {
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 10px;
+  text-decoration: none;
+  text-decoration-color: #374e33;
 }
 
 .post-title {
@@ -497,6 +512,7 @@ footer a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration-color: #374e33;
 }
 
 .post-meta {

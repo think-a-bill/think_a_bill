@@ -9,36 +9,42 @@
 {% endblock head %}
 
 {% block content %}
-  <div class="detail--box">
-    {{product.title}}<br>
-    {{product.category}}<br>
-    {% if product.image %}
-    <img src="{{ product.image.url }}" alt="Product Image"><br>
-    {% endif %}
-    {{product.content}}<br>
-    <div>
-        {% for tag in tags %}
-        <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
-        {% endfor %}
+<div class="detail--box">
+  <div class="detail--info">
+    <div class="detail--header">
+      <div class="detail--category">{{ product.category }}</div>
+      <div class="detail--title"><b>{{ product.title }}</b></div>
     </div>
-    {% comment %} {% for comment in comments %}
-    {{comment.user}}
-    {{comment.content}}
-    {% endfor %} {% endcomment %}
-  </div>
-
-{% if request.user.is_authenticated %}
-<form id="like-form" data-product-id="{{ product.pk }}">
-    {% csrf_token %}
-    {% if request.user in product.like_product.all %}
-    <button type="submit">♥</button>
-    {% else %}
-    <button type="submit">♡</button>
+    <div class="detail--content">
+      {{ product.content }}
+    </div>
+    {% if product.image %}
+    <div class="detail--image--box">
+      <img src="{{ product.image.url }}" alt="Product Image">
+    </div>
     {% endif %}
-</form>
-{% endif %}
+    <div class="detail--tags">
+      {% for tag in tags %}
+      <a href="{% url 'posts:search' %}?q={{ tag }}">{{ tag }}</a>
+      {% endfor %}
+    </div>
 
-<p>좋아요 수: <span id="like-count">{{ product_likes_count }}</span></p>
+  {% if request.user.is_authenticated %}
+  <form id="product-like-form" data-post-id="{{product.pk }}">
+      {% csrf_token %}
+      {% if request.user in product.like_product.all %}
+      <button type="submit">♥</button>
+      {% else %}
+      <button type="submit">♡</button>
+      {% endif %}
+  </form>
+  {% endif %} 
+
+  <div id="post-likes-count">
+    Likes
+  </div>
+  <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
+</div>
 
 <form action="{% url 'products:delete' product.pk %}" method='POST'>
     {% csrf_token %}
