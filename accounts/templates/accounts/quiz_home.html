@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+    회원 여러분 반갑습니다
+</div>
+<div>
+    문제는 <h2>총 {{ quiz_count }} 문제 입니다.</h2>
+</div>
+<div>
+    점수를 통해 회원님의 등급을 측정해 알맞는 정보를 드리고자 합니다.
+</div>
+<form action="" method="get">
+<div class="pnu-name">나는 금융 정보가 필요한 <input type="text" name="name" class="txt" placeholder="이름 입력(ex:홍길동)">입니다.</div>
+<div class="content">
+    <div class="strat_btn">
+        <input type="btn" type="submit" value="나의 금융 지식 등급은?"> 
+    </div>
+    <div>
+        각 문항은 배점이 같습니다.
+    </div>
+    <div>
+        점수가 낮아도 실망하지 마세요!
+    </div>
+</div>
+
+</form>
+
+{% endblock  %}
