@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content  %}
+{% block content %}
+<h2>총 {{ quiz_count }} 문제 입니다.</h2>
 
+{% if quiz.id > quiz_count %}
+  <p>퀴즈를 모두 풀었습니다. 점수: {{ user.score }}</p>
+{% else %}
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
+    <h3>{{ quiz.question_text }}</h3>
+    <input type="radio" name="answer" value="{{ quiz.option1 }}"> {{ quiz.option1 }}<br>
+    <input type="radio" name="answer" value="{{ quiz.option2 }}"> {{ quiz.option2 }}<br>
+    <input type="radio" name="answer" value="{{ quiz.option3 }}"> {{ quiz.option3 }}<br>
+    <input type="radio" name="answer" value="{{ quiz.option4 }}"> {{ quiz.option4 }}<br>
+    <button type="submit">제출</button>
+  </form>
+{% endif %}
 {% endblock  %}

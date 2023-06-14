@@ -11,8 +11,9 @@ from django.views.generic import DetailView
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm, CustomUserChangeForm , CustomAuthenticationForm
 from allauth.socialaccount.models import SocialAccount
-import requests 
 from .models import Question, User , PnuUser , Answer
+from .forms import QuestionForm , AnswerForm
+from django.urls import reverse 
 
 # Create your views here.
 def login(request):
@@ -96,19 +97,31 @@ def delete(request):
 #   template_name = 'accounts/profile_detail.html'
 #   context_object_name = 'details'
 
-def profile_detail(request,username):
+
+def profile_detail(request, username):
   # 어차피 해당 유저의 프로필을 보여줌.
   # profile_detail = User.objects.get(username=username)
   # context = {
   #   'profile_detail' : profile_detail,
   # }
-  # return render(request,'accounts/profile_detail.html',context)
-  User = get_user_model()
+  # return render(request,'accounts/profile_detail.html',context)    
   person = User.objects.get(username=username)
   context = {
-      'person': person,
-  }
-  return render(request, 'accounts/profile_detail.html', context)
+         'person':person,
+      }
+  if request.method == 'GET':
+      user = PnuUser.objects.create(name='익명')
+      user.save()
+      return render(request, 'accounts/profile_detail.html', context)
+  elif request.method == 'POST':
+      user = PnuUser()
+      user.name = request.POST.get('username', '')
+      if not user.name:
+          user.name = '익명'
+      user.save()
+      return render(request, 'accounts/profile_detail.html', context)
+  else:
+    return render(request, 'accounts/profile_detail.html', context)
 
 @login_required
 def follow(request,username):
@@ -204,33 +217,66 @@ def toggle_follow(request):
 #         user.grade = 'D'
 #     user.save()
 
-def quiz(requset):
-   if requset.GET:
-      user = PnuUser()
-      user.name = requset.GET['username']
-      if requset.GET['username'] == "":
-         user.name = '익명'
-      user.save()
-      return redirect('quiz',user.pk)
-   return render(requset, "accounts/quiz.html")
+# def home_quiz(request, pk):
+#    if request.GET:
+#       user = PnuUser()
+#       user.name = request.GET.get('username', '')
+#       if request.GET['username'] == "":
+#          user.name = '익명'
+#       user.save()
+#       return redirect('quiz', pk=user.pk)
+#    return render(request, "accounts/quiz.html")
 
-def question(request,pk):
+
+def quiz_home(request): 
+  if request.GET:
+    user = PnuUser()
+    user.name = request.GET['name']
+    if request.GET['name'] == "":
+      user.name = "익명"
+    user.save()
+    return redirect("quiz", user.pk)
+  return render(request, 'quiz_home.html')
+
+def quiz(request,pk):
   user = get_object_or_404(PnuUser, pk=pk)
   aans = get_object_or_404(Answer)
 
   num = 1
   if request.POST:
-    num = int(request.POST['quiz_id']) + 1
-    user.answer = user.answer + request.POST['answer']
-    if request.POST['answer'] == aans.ans[num-2]:
+     num = int(request.POST['quiz_id']) + 1
+     user.answer = user.answer + request.POST['answer']
+     if request.POST['answer'] == aans.ans[num-2]:
         user.score += 1
         user.save()
-    if num > 4:
-        return redirect('set_grade',pk)
-  
-  quiz = get_object_or_404(Question, id=num)
+     if num > 4:
+      return redirect("set_grade", pk)
+  quiz = get_object_or_404(Question, id=num )
+  return render(request, "accounts/quiz.html", {'quiz':quiz})
 
-  return render(request, "quiz.html", {'quiz':quiz})
+def quiz_make(request):
+    if request.method == 'POST':
+        form = QuestionForm(request.POST, request.FILES)
+        if form.is_valid():
+            quiz = form.save(commit=False)
+            quiz.user = request.user
+            quiz.save()
+            return redirect('accounts:quiz', pk=quiz.user.pk)
+    else:
+        form = QuestionForm()
+    return render(request, 'accounts/quiz_make.html', {'form': form})
+
+def answer_make(request):
+    if request.method == 'POST':
+        form = AnswerForm(request.POST, request.FILES)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.user = request.user
+            answer.save()
+            return redirect(reverse('accounts:quiz', kwargs={'pk': answer.user.pk}))
+    else:
+        form = AnswerForm()
+    return render(request, 'accounts/answer_make.html', {'form': form})
 
 def set_grade(user):
     if user.score >= 5:
@@ -242,3 +288,9 @@ def set_grade(user):
     else:
         user.grade = 'D'
     user.save()
+
+lst = []
+def save_ans(request):
+  ans = request.GET['ans']
+  lst.append(ans)
+  

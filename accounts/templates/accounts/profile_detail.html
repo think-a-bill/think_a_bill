@@ -87,7 +87,12 @@
         </p>
         <p>이메일 : {{ person.email }}</p>
         <p>생년월일 : {{ person.birthday }}</p>
-        button
+        <p>나의 금융 레벨 : {{person.grade}}</p>
+        <!-- 퀴즈 버튼 -->
+        <div>
+          <a href="{% url 'accounts:quiz' %}"><button class="profile--followbtn" >퀴즈</button></a> 를 풀고 금융 레벨을 측정해 보세요!
+        </div>
+        <br>
         <!-- 팔로워 모달 버튼 -->
         <div>
           <button type="button" class="profile--followbtn" data-bs-toggle="modal" data-bs-target="#followersModal">
@@ -163,7 +168,6 @@
               </div>
             </div>
           </div>
-      </div>
     </div>
   </div>
 </div>
@@ -173,6 +177,7 @@
   </div>
 </div>
 {% endblock content %}
+
 {% comment %} {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="{% static '/js/profile.js' %}"></script>

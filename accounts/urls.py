@@ -1,4 +1,4 @@
-from django.urls import path, reverse_lazy
+from django.urls import path, reverse_lazy , include
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 from .views import CustomPasswordChangeView
@@ -10,6 +10,7 @@ app_name = 'accounts'
 urlpatterns = [
     path('basic_login/',LoginView.as_view(template_name='accounts/login_form.html'), name='basic_login'),
     path('login/', views.login, name='login'),
+    path('basic_logout/',LogoutView.as_view(), name='basic_logout'),
     path('logout/',LogoutView.as_view(), name='logout'),
     path('signup/', views.signup, name='signup'),
     path('basic_signup/', views.basic_signup, name='basic_signup'),
@@ -20,4 +21,8 @@ urlpatterns = [
     # path('<username>/follow/',views.follow,name='follow'),
     path('toggle-follow/', views.toggle_follow, name='toggle_follow'),
     # path('<username>/image/',views.image_upload,name='image_upload')
+    path('quiz/', views.quiz, name='quiz'),
+    path('quiz_make/', views.quiz_make, name='quiz_make'),
+    path('answer_make/', views.answer_make, name='answer_make'),
+    path('set_grade/<int:pk>', views.set_grade,name='set_grade'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
