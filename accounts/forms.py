@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm,  PasswordChangeForm
 from django.contrib.auth import get_user_model
 import datetime
+from .models import Question , Answer
 
 # 회원가입
 class CustomUserCreationForm(UserCreationForm):
@@ -172,3 +173,13 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         ),
         help_text='',
     )
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['question_text', 'option1', 'option2', 'option3', 'option4', 'image']
+
+class AnswerForm(forms.ModelForm):
+    class Meta:
+        model = Answer
+        fields = ['ans',]
