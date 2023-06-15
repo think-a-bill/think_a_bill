@@ -212,3 +212,4 @@ LOGIN_REDIRECT_URL = reverse_lazy('main')
 LOGOUT_REDIRECT_URL = reverse_lazy('main')
 
 PASSWORD_CHANGE_REDIRECT_URL = '/'
+CSRF_COOKIE_SECURE = True
