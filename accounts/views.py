@@ -15,6 +15,7 @@ from .models import Question, User , PnuUser , Answer
 from .forms import QuestionForm , AnswerForm
 from django.urls import reverse 
 
+
 # Create your views here.
 def login(request):
     # if request.user.is_authenticated:
@@ -33,7 +34,7 @@ def login(request):
     # return render(request, 'accounts/login.html', context)
     pass
 
-User = get_user_model()
+# User = get_user_model()
 
 def signup(request):
     # if request.user.is_authenticated:
@@ -235,10 +236,10 @@ def quiz_home(request):
     if request.GET['name'] == "":
       user.name = "익명"
     user.save()
-    return redirect("quiz", user.pk)
-  return render(request, 'quiz_home.html')
+    return redirect("accounts:quiz", user.pk)
+  return render(request, 'accounts/quiz_home.html')
 
-def quiz(request,pk):
+def quiz(request, pk):
   user = get_object_or_404(PnuUser, pk=pk)
   aans = get_object_or_404(Answer)
 
@@ -250,7 +251,7 @@ def quiz(request,pk):
         user.score += 1
         user.save()
      if num > 4:
-      return redirect("set_grade", pk)
+      return redirect("accoutns:set_grade", pk)
   quiz = get_object_or_404(Question, id=num )
   return render(request, "accounts/quiz.html", {'quiz':quiz})
 
@@ -259,9 +260,8 @@ def quiz_make(request):
         form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
             quiz = form.save(commit=False)
-            quiz.user = request.user
             quiz.save()
-            return redirect('accounts:quiz', pk=quiz.user.pk)
+            return render(request, 'accounts/quiz_make.html', {'form': form})
     else:
         form = QuestionForm()
     return render(request, 'accounts/quiz_make.html', {'form': form})
@@ -288,9 +288,3 @@ def set_grade(user):
     else:
         user.grade = 'D'
     user.save()
-
-lst = []
-def save_ans(request):
-  ans = request.GET['ans']
-  lst.append(ans)
-  
