@@ -18,5 +18,4 @@ async def main():
     is_equal = message_dict == response_dict
     print("송신/수신 데이터가 같습니까?", is_equal)
 
-
 asyncio.run(main())
