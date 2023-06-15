@@ -38,7 +38,7 @@
       {% block search-bar %}
       <div class="nav--search">
         <form action="{% url 'posts:search' %}" method="GET" class="search">
-            {% csrf_token %}
+          {% csrf_token %}
           <div>
             <input type="search" placeholder='검색어를 입력하세요!' name='q' style="padding-left:16px;">
             <button class="search-btn" type="submit">
@@ -94,6 +94,7 @@
   <div id="searchOffcanvas" class="offcanvas">
     <div class="offcanvas-inner">
       <form action="{% url 'posts:search' %}" method="GET" class="position-relative search-mobile">
+        {% csrf_token %}
         <input type="search" placeholder='검색어를 입력하세요!' name='q' style="padding-left:16px;" class="offcanvas-search">
         <button class="search-btn" type="submit"> 
           <i class="fa-solid fa-magnifying-glass" style="color: #183f20;"></i>
