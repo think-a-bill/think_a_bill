@@ -38,6 +38,7 @@
       {% block search-bar %}
       <div class="nav--search">
         <form action="{% url 'posts:search' %}" method="GET" class="search">
+            {% csrf_token %}
           <div>
             <input type="search" placeholder='검색어를 입력하세요!' name='q' style="padding-left:16px;">
             <button class="search-btn" type="submit">
