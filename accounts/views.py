@@ -15,6 +15,7 @@ from .models import Question, User , PnuUser , Answer
 from .forms import QuestionForm , AnswerForm
 from django.urls import reverse 
 
+
 # Create your views here.
 def login(request):
     # if request.user.is_authenticated:
@@ -33,7 +34,7 @@ def login(request):
     # return render(request, 'accounts/login.html', context)
     pass
 
-User = get_user_model()
+# User = get_user_model()
 
 def signup(request):
     # if request.user.is_authenticated:

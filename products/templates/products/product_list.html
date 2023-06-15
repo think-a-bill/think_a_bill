@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
   Product List
 {% endblock title %}
@@ -26,11 +27,24 @@
     <div class="posts">
       <ul>
         {% for product in products %}
-          <li class="product--item">
-            <a href="{% url 'products:detail' product.pk %}" class="main--card">
-              <span class="product--title">{{ product.title }}</span>
-              <span class="product--category">{{ product.category }}</span>
-              <span class="product--date">{{ product.created_at|date:"Y년 m월 d일" }}</span>
+          <li class="product--item" style="width: 250px;" >
+            {% comment %} <a href="{% url 'products:detail' product.pk %}" class="main--card" >
+              <div class="flex-container justify-content-between">
+                <span class="product--title">{{ product.title }}</span>
+                <br>
+                <span class="product--category">{{ product.category }}</span>
+                <span class="product--date">{{ product.created_at|date:"Y년 m월 d일" }}</span>
+              </div>
+            </a> {% endcomment %}
+            <a href="{% url 'products:detail' product.pk %}" class="post-item">
+              <div class="post-header">
+                <h3 class="post-title">{{ product.title }}</h3>
+                <div class="post-meta">
+                  <span class="post-category">{{ product.category }}</span>
+                  <span class="post-date">{{ product.created_at|date:"Y년 m월 d일" }}</span>
+                </div>
+              </div>
+              <div class="post-content">{{ product.content }}</div>
             </a>
           </li>
           {% empty %}

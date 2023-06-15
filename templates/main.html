@@ -32,6 +32,14 @@
       </ul>
     </div>
   </div>
+  <div>
+    <div class="top--box">Stock Information</div>
+    <ul>
+        {% for stock_name in stock_names %}
+        <li>{{ stock_name|linebreaksbr }}</li>
+        {% endfor %}
+    </ul>
+  </div>
 </div>
 
 {% endblock content %}

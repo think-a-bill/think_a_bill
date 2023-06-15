@@ -42,9 +42,9 @@
     {% endif %} 
   
     <div id="post-likes-count">
+      <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
       Likes
     </div>
-    <span id="post-likes-count">{{ post.like_posts.all|length }}</span>
 
   
     <div class="detail--comments">
@@ -52,17 +52,18 @@
       <div class="comment">
         {{ comment.user }} :
         {{ comment.content }}
-      </div>
-      {% endfor %}
-
-      <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
+      {% comment %} <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
         {% csrf_token %}
         {% if request.user in comment.like_comment.all %}
           <button type="submit">♥</button>
         {% else %}
           <button type="submit">♡</button>
         {% endif %}
-      </form>
+      </form> {% endcomment %}
+    </div>
+      {% endfor %}
+
+
       <form action="{% url 'posts:comments_create' post.pk %}" method="POST">
         {% csrf_token %}
         <div style="display: flex;">

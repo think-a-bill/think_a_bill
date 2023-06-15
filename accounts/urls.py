@@ -4,6 +4,7 @@ from . import views
 from .views import CustomPasswordChangeView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
 # from accounts.views import kakao_login, kakao_callback
 
 app_name = 'accounts'
