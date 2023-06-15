@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from posts.models import Post
 from products.models import Product
+import requests
+from bs4 import BeautifulSoup
 
 def main(request):
     # posts = Post.objects
@@ -29,8 +31,16 @@ def main(request):
     # return render(request, 'main.html')
     recent_posts = Post.objects.order_by('-created_at')[:5]  # 최근 5개의 게시글 가져오기
     recent_products = Product.objects.order_by('-created_at')[:5]  # 최근 5개의 게시글 가져오기
+    #스톡
+    req = requests.get('https://finance.naver.com/sise/')
+    html = req.text
+    soup = BeautifulSoup(html, 'html.parser')
+    my_stock = soup.select('.lst_pop')
+
+    stock_names = [stock_name.text for stock_name in my_stock]
     context = {
         'recent_posts': recent_posts,
-        'recent_products': recent_products
+        'recent_products': recent_products,
+        'stock_names': stock_names,
         }
     return render(request, 'main.html', context)
