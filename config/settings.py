@@ -18,6 +18,7 @@ from django.conf import settings
 from environ import Env
 
 import os
+from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,8 +34,15 @@ if env_path.exists():
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
+"""
+load_dotenv()
+.env 파일의 key-value를 프로그램 환경 변수에 등록
+"""
+load_dotenv()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-fa)=b)@qutru-!*m(b1h^c^&ewycwqft(yk6*jh+r=q3vl)g1&'
+# SECRET_KEY = 'django-insecure-fa)=b)@qutru-!*m(b1h^c^&ewycwqft(yk6*jh+r=q3vl)g1&'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -130,7 +138,6 @@ DATABASES = {
 }
 
 # django channels layer
-
 if 'CHANNEL_LAYER_REDIS_URL' in env:
     channel_layer_redis = env.db_url('CHANNEL_LAYER_REDIS_URL')
 
