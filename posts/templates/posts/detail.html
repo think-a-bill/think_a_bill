@@ -50,7 +50,7 @@
     <div class="detail--comments">
       {% for comment in comments %}
       <div class="comment">
-        {{ comment.user }} :
+        <a href="{% url 'accounts:detail' username=comment.user.username %}">{{ comment.user }}</a>:
         {{ comment.content }}
       {% comment %} <form id="comment-like-form" data-comment-id="{{ comment.pk }}" data-post-id="{{ post.pk }}">
         {% csrf_token %}
